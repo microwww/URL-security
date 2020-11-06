@@ -9,13 +9,6 @@ public class WeakCache implements CommonCache {
 
     private final Map map = Collections.synchronizedMap(new WeakHashMap());
 
-    private static final CommonCache cache = new WeakCache();
-    public static CommonCache getCache() {
-        return cache;
-    }
-
-    private WeakCache() {
-    }
     @Override
     public void cache(String key, Serializable o) {
         map.put(key, o);
