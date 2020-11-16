@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.github.microwww.security.cli.help;
 
 import javax.servlet.FilterConfig;
@@ -19,16 +15,16 @@ public class HttpSessionRightFilter extends AbstractAntPathRightFilter {
     /**
      * session 中缓存用户的KEY
      */
-    private String login_seesion_key;
+    private String loginSessionKey;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         super.init(filterConfig);
-        this.login_seesion_key = Rconfig.getSessionKey();
+        this.loginSessionKey = Rconfig.getSessionKey();
     }
 
     @Override
     protected Employee getLogin(HttpServletRequest request) {
-        return (Employee) request.getSession(true).getAttribute(login_seesion_key);
+        return (Employee) request.getSession(true).getAttribute(loginSessionKey);
     }
 }

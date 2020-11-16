@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- *
  * @author changshu.li
  */
 public class Rconfig {
@@ -43,7 +42,15 @@ public class Rconfig {
     }
 
     public static String getSessionKey() {
-        return (String) getConfig().getProperty("login_seesion_key", "LOGIN_EMPLOYE");
+        return getConfig().getProperty("login_session_key", "LOGIN_EMPLOYEE");
+    }
+
+    public static String getTokenStore() {
+        return getConfig().getProperty("token_store", "header");
+    }
+
+    public static String getTokenName() {
+        return getConfig().getProperty("token_name", "token");
     }
 
     public static String getLoginPage() {
