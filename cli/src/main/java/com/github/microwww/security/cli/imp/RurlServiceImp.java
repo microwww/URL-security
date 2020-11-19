@@ -7,8 +7,8 @@ import com.github.microwww.security.cli.FindService;
 import com.github.microwww.security.cli.NoRightException;
 import com.github.microwww.security.cli.RurlService;
 import com.github.microwww.security.cli.dto.App;
-import com.github.microwww.security.cli.dto.Employee;
-import com.github.microwww.security.cli.dto.RightURL;
+import com.github.microwww.security.cli.dto.Account;
+import com.github.microwww.security.cli.dto.Authority;
 
 import java.io.IOException;
 import java.util.*;
@@ -28,11 +28,11 @@ public class RurlServiceImp implements RurlService {
     }
 
     @Override
-    public Employee login(String account, String password) throws NoRightException {
+    public Account login(String account, String password) throws NoRightException {
         try {
             if (this.hasLoginRight(appName, account)) {
                 String login = FindService.loadHttpClient().post(host + "/login", "account", account, "password", password);
-                return mapper.readValue(login, Employee.class);
+                return mapper.readValue(login, Account.class);
             }
             throw new NoRightException(-3, String.format("您（%s）没有登录该应用（%s）的权限!", account, appName));
         } catch (IOException e) {
@@ -41,10 +41,10 @@ public class RurlServiceImp implements RurlService {
     }
 
     @Override
-    public List<RightURL> listUrlRight(String account) {
+    public List<Authority> listUrlRight(String account) {
         try {
             String login = FindService.loadHttpClient().get(host + "/account/right.url", "account", account);
-            RightURL[] r = mapper.readValue(login, RightURL[].class);
+            Authority[] r = mapper.readValue(login, Authority[].class);
             return Arrays.asList(r);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -52,10 +52,10 @@ public class RurlServiceImp implements RurlService {
     }
 
     @Override
-    public List<RightURL> listAppURL() {
+    public List<Authority> listAppURL() {
         try {
             String login = FindService.loadHttpClient().get(host + "/account/right.url", "appName", appName);
-            RightURL[] r = mapper.readValue(login, RightURL[].class);
+            Authority[] r = mapper.readValue(login, Authority[].class);
             return Arrays.asList(r);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -63,22 +63,22 @@ public class RurlServiceImp implements RurlService {
     }
 
     @Override
-    public List<RightURL> listMenu(String account) {
-        List<RightURL> result = new ArrayList();
-        List<RightURL> list = this.listUrlRight(account);
-        for (RightURL url : list) {
+    public List<Authority> listMenu(String account) {
+        List<Authority> result = new ArrayList();
+        List<Authority> list = this.listUrlRight(account);
+        for (Authority url : list) {
             if (url.getType() == 1) {
                 result.add(url);
             } else if (url.getType() == 2) {
                 result.add(url);
             }
         }
-        Collections.sort(result, Comparator.comparingInt(RightURL::getSort));
+        Collections.sort(result, Comparator.comparingInt(Authority::getSort));
         return result;
     }
 
     @Override
-    public List<RightURL> saveUrlRight(Set<String> set) {
+    public List<Authority> saveUrlRight(Set<String> set) {
         try {
             String[] ss = new String[set.size()];
             int i = 0;
@@ -87,7 +87,7 @@ public class RurlServiceImp implements RurlService {
                 ss[i++] = v;
             }
             String login = FindService.loadHttpClient().post(host + "/save/right.url", ss);
-            RightURL[] r = mapper.readValue(login, RightURL[].class);
+            Authority[] r = mapper.readValue(login, Authority[].class);
             return Arrays.asList(r);
         } catch (IOException e) {
             throw new RuntimeException(e);

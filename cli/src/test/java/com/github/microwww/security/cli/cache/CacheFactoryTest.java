@@ -1,7 +1,7 @@
 
 package com.github.microwww.security.cli.cache;
 
-import com.github.microwww.security.cli.dto.Employee;
+import com.github.microwww.security.cli.dto.Account;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -31,10 +31,10 @@ public class CacheFactoryTest {
         System.out.println("getCommonCache");
         Object expResult = "vvvv" + System.currentTimeMillis();
         String key = expResult.toString();
-        Employee o = new Employee();
+        Account o = new Account();
         o.setAccount(expResult.toString());
         cache.cache(key, o);
-        Employee result = (Employee) cache.getCacheSerializable(key);
+        Account result = (Account) cache.getCacheSerializable(key);
         assertEquals(expResult, result.getAccount());
     }
 
@@ -46,10 +46,10 @@ public class CacheFactoryTest {
 
         String key = expResult.toString();
 
-        Employee o = new Employee();
+        Account o = new Account();
         o.setAccount(expResult.toString());
         cache.cache(key, o);
-        Employee result = (Employee) cache.getCacheSerializable(key);
+        Account result = (Account) cache.getCacheSerializable(key);
         assertEquals(expResult, result.getAccount());
     }
 

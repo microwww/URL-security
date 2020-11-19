@@ -5,23 +5,23 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.microwww.security.cli.dto.App;
-import com.github.microwww.security.cli.dto.Employee;
-import com.github.microwww.security.cli.dto.RightURL;
+import com.github.microwww.security.cli.dto.Account;
+import com.github.microwww.security.cli.dto.Authority;
 
 /**
  * @author changshu.li
  */
 public interface RurlService {
 
-    Employee login(String account, String password) throws NoRightException;
+    Account login(String account, String password) throws NoRightException;
 
-    List<RightURL> listUrlRight(String account);
+    List<Authority> listUrlRight(String account);
 
-    List<RightURL> listAppURL();
+    List<Authority> listAppURL();
 
-    List<RightURL> listMenu(String account);
+    List<Authority> listMenu(String account);
 
-    List<RightURL> saveUrlRight(Set<String> set);
+    List<Authority> saveUrlRight(Set<String> set);
 
     App getApplication();
 

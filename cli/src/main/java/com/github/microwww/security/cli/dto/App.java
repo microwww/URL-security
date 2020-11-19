@@ -13,11 +13,6 @@ public class App implements Serializable {
     private int id;
     private String appName;
     private String name;
-    /**
-     * true: white list / false: blank list
-     */
-    private boolean whiteList;
-    private int loginGroup;
     private String description;
 
     public int getId() {
@@ -42,22 +37,6 @@ public class App implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isWhiteList() {
-        return whiteList;
-    }
-
-    public void setWhiteList(boolean whiteList) {
-        this.whiteList = whiteList;
-    }
-
-    public int getLoginGroup() {
-        return loginGroup;
-    }
-
-    public void setLoginGroup(int loginGroup) {
-        this.loginGroup = loginGroup;
     }
 
     public String getDescription() {

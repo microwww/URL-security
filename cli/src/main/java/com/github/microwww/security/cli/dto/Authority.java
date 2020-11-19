@@ -7,24 +7,22 @@ import java.io.Serializable;
  *
  * @author changshu.li
  */
-public class RightURL implements Serializable {
+public class Authority implements Serializable {
 
     private int id;
     private String name;
     private int webappId;
-    private String webappPath;
+    private String uri;
     private int type;
     private int sort;
-    private String data;
-    private boolean catalog;
     private int parentId;
     private String description;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -36,20 +34,20 @@ public class RightURL implements Serializable {
         this.name = name;
     }
 
-    public Integer getWebappId() {
+    public int getWebappId() {
         return webappId;
     }
 
-    public void setWebappId(Integer webappId) {
+    public void setWebappId(int webappId) {
         this.webappId = webappId;
     }
 
-    public String getWebappPath() {
-        return webappPath;
+    public String getUri() {
+        return uri;
     }
 
-    public void setWebappPath(String webappPath) {
-        this.webappPath = webappPath;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public int getType() {
@@ -68,27 +66,11 @@ public class RightURL implements Serializable {
         this.sort = sort;
     }
 
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public boolean isCatalog() {
-        return catalog;
-    }
-
-    public void setCatalog(boolean catalog) {
-        this.catalog = catalog;
-    }
-
-    public Integer getParentId() {
+    public int getParentId() {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId(int parentId) {
         this.parentId = parentId;
     }
 

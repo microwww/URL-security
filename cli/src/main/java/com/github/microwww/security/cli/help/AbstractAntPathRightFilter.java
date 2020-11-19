@@ -1,8 +1,8 @@
 package com.github.microwww.security.cli.help;
 
 import com.github.microwww.security.cli.FindService;
-import com.github.microwww.security.cli.dto.Employee;
-import com.github.microwww.security.cli.dto.RightURL;
+import com.github.microwww.security.cli.dto.Account;
+import com.github.microwww.security.cli.dto.Authority;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -32,12 +32,12 @@ public class AbstractAntPathRightFilter extends AbstractRightFilter {
     }
 
     @Override
-    protected List<RightURL> getAccountUrls(Employee employee) {
+    protected List<Authority> getAccountUrls(Account employee) {
         return FindService.loadRurlService().listUrlRight(employee.getAccount());
     }
 
     @Override
-    protected Employee getLogin(HttpServletRequest request) {
+    protected Account getLogin(HttpServletRequest request) {
         return null;
     }
 }

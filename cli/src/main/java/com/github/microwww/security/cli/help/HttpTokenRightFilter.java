@@ -2,7 +2,7 @@
 package com.github.microwww.security.cli.help;
 
 import com.github.microwww.security.cli.FindService;
-import com.github.microwww.security.cli.dto.Employee;
+import com.github.microwww.security.cli.dto.Account;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -24,10 +24,10 @@ public class HttpTokenRightFilter extends AbstractAntPathRightFilter {
     }
 
     @Override
-    protected Employee getLogin(HttpServletRequest request) {
+    protected Account getLogin(HttpServletRequest request) {
         String token = tokenStore.getToken(request, tokenName);
         Object em = FindService.loadCache().getCacheJson("Employee:token:" + token);
-        return (Employee) em;
+        return (Account) em;
     }
 
     public enum TokenStore {

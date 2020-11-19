@@ -1,7 +1,7 @@
 package com.github.microwww.security.cli.help;
 
-import com.github.microwww.security.cli.dto.Employee;
-import com.github.microwww.security.cli.dto.RightURL;
+import com.github.microwww.security.cli.dto.Account;
+import com.github.microwww.security.cli.dto.Authority;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -36,15 +36,15 @@ public abstract class AbstractRightFilter implements Filter {
             return;
         }
 
-        Employee login = getLogin(request);
+        Account login = getLogin(request);
         if (login == null) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
             return;
         }
 
-        List<RightURL> right = this.getAccountUrls(login);
-        for (RightURL mt : right) {
-            String matcher = mt.getWebappPath();
+        List<Authority> right = this.getAccountUrls(login);
+        for (Authority mt : right) {
+            String matcher = mt.getUri();
             boolean match = antPath.match(matcher, path); // TODO :: cache
             if (match) {
                 chain.doFilter(request, response);
@@ -69,7 +69,7 @@ public abstract class AbstractRightFilter implements Filter {
 
     protected abstract boolean anonymous(HttpServletRequest request, String path);
 
-    protected abstract List<RightURL> getAccountUrls(Employee employee);
+    protected abstract List<Authority> getAccountUrls(Account employee);
 
-    protected abstract Employee getLogin(HttpServletRequest request);
+    protected abstract Account getLogin(HttpServletRequest request);
 }

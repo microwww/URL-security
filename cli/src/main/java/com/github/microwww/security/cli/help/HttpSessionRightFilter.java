@@ -4,7 +4,7 @@ package com.github.microwww.security.cli.help;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import com.github.microwww.security.cli.dto.Employee;
+import com.github.microwww.security.cli.dto.Account;
 
 /**
  *
@@ -24,7 +24,7 @@ public class HttpSessionRightFilter extends AbstractAntPathRightFilter {
     }
 
     @Override
-    protected Employee getLogin(HttpServletRequest request) {
-        return (Employee) request.getSession(true).getAttribute(loginSessionKey);
+    protected Account getLogin(HttpServletRequest request) {
+        return (Account) request.getSession(true).getAttribute(loginSessionKey);
     }
 }

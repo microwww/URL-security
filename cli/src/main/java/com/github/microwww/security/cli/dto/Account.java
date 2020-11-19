@@ -4,19 +4,13 @@ package com.github.microwww.security.cli.dto;
 import java.io.Serializable;
 import java.util.UUID;
 
-/**
- * 于service 中的 Emloye 等价
- *
- * @author changshu.li
- */
-public class Employee implements Serializable {
+public class Account implements Serializable {
 
     private final String cacheKey;
     private String account;
     private String name;
-    private Object other;
 
-    public Employee() {
+    public Account() {
         cacheKey = UUID.randomUUID().toString();
     }
 
@@ -34,14 +28,6 @@ public class Employee implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Object getOther() {
-        return other;
-    }
-
-    public void setOther(Object other) {
-        this.other = other;
     }
 
     public String getCacheKey() {
