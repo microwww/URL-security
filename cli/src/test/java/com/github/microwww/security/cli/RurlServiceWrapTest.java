@@ -19,20 +19,20 @@ import static org.junit.Assert.*;
  */
 public class RurlServiceWrapTest {
 
-    RurlService instance = new RurlServiceImp("simple", "https://www.baidu.com/api");
+    AccountAuthorityService instance = new RurlServiceImp("simple", "https://www.baidu.com/api");
 
     @Test
     public void testListUrlRight() {
         System.out.println("listUrlRight");
         String account = "1";
-        List<Authority> result = instance.listUrlRight(account);
+        List<Authority> result = instance.listAuthorityByAccount(account);
         assertFalse(result.isEmpty());
     }
 
     @Test
     public void testListAppURL() {
         System.out.println("listAppURL");
-        List<Authority> result = instance.listAppURL();
+        List<Authority> result = instance.listAuthorityByApp();
         assertFalse(result.isEmpty());
     }
 
@@ -60,7 +60,7 @@ public class RurlServiceWrapTest {
         set.add("/app/");
         set.add("/groups/");
         set.add("/url/");
-        List<Authority> result = instance.saveUrlRight(set);
+        List<Authority> result = instance.saveAuthorityUrl(set);
         assertEquals(result.size(), set.size());
     }
 

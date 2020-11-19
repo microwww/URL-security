@@ -66,7 +66,7 @@ public class Rconfig {
     }
 
     public static String getAppName() {
-        return getConfig("appname", "");
+        return getConfig("appName", "");
     }
 
     public static String getCachePrefix() {

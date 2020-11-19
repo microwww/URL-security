@@ -33,7 +33,7 @@ public class AbstractAntPathRightFilter extends AbstractRightFilter {
 
     @Override
     protected List<Authority> getAccountUrls(Account employee) {
-        return FindService.loadRurlService().listUrlRight(employee.getAccount());
+        return FindService.loadAuthorityService().listAuthorityByAccount(employee.getAccount());
     }
 
     @Override

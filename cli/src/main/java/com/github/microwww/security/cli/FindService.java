@@ -26,8 +26,8 @@ public class FindService {
         return find.load(HttpClient.class, () -> new HttpClientImpl());
     }
 
-    public static RurlService loadRurlService() {
-        return find.load(RurlService.class, () -> {
+    public static AccountAuthorityService loadAuthorityService() {
+        return find.load(AccountAuthorityService.class, () -> {
             String name = Rconfig.getAppName();
             String server = Rconfig.getRurlServer();
             return new RurlServiceImp(name, server);

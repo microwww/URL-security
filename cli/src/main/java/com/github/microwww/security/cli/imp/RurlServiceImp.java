@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.microwww.security.cli.AjaxMessage;
 import com.github.microwww.security.cli.FindService;
 import com.github.microwww.security.cli.NoRightException;
-import com.github.microwww.security.cli.RurlService;
+import com.github.microwww.security.cli.AccountAuthorityService;
 import com.github.microwww.security.cli.dto.App;
 import com.github.microwww.security.cli.dto.Account;
 import com.github.microwww.security.cli.dto.Authority;
@@ -16,7 +16,7 @@ import java.util.*;
 /**
  * @author changshu.li
  */
-public class RurlServiceImp implements RurlService {
+public class RurlServiceImp implements AccountAuthorityService {
 
     private static ObjectMapper mapper = new ObjectMapper();
     private final String appName;
@@ -41,9 +41,9 @@ public class RurlServiceImp implements RurlService {
     }
 
     @Override
-    public List<Authority> listUrlRight(String account) {
+    public List<Authority> listAuthorityByAccount(String account) {
         try {
-            String login = FindService.loadHttpClient().get(host + "/account/right.url", "account", account);
+            String login = FindService.loadHttpClient().get(host + "/account/authority", "account", account);
             Authority[] r = mapper.readValue(login, Authority[].class);
             return Arrays.asList(r);
         } catch (IOException e) {
@@ -52,9 +52,9 @@ public class RurlServiceImp implements RurlService {
     }
 
     @Override
-    public List<Authority> listAppURL() {
+    public List<Authority> listAuthorityByApp() {
         try {
-            String login = FindService.loadHttpClient().get(host + "/account/right.url", "appName", appName);
+            String login = FindService.loadHttpClient().get(host + "/app/authority", "appName", appName);
             Authority[] r = mapper.readValue(login, Authority[].class);
             return Arrays.asList(r);
         } catch (IOException e) {
@@ -65,7 +65,7 @@ public class RurlServiceImp implements RurlService {
     @Override
     public List<Authority> listMenu(String account) {
         List<Authority> result = new ArrayList();
-        List<Authority> list = this.listUrlRight(account);
+        List<Authority> list = this.listAuthorityByAccount(account);
         for (Authority url : list) {
             if (url.getType() == 1) {
                 result.add(url);
@@ -78,7 +78,7 @@ public class RurlServiceImp implements RurlService {
     }
 
     @Override
-    public List<Authority> saveUrlRight(Set<String> set) {
+    public List<Authority> saveAuthorityUrl(Set<String> set) {
         try {
             String[] ss = new String[set.size()];
             int i = 0;
@@ -86,7 +86,7 @@ public class RurlServiceImp implements RurlService {
                 ss[i++] = "url";
                 ss[i++] = v;
             }
-            String login = FindService.loadHttpClient().post(host + "/save/right.url", ss);
+            String login = FindService.loadHttpClient().post(host + "/authority/save.url", ss);
             Authority[] r = mapper.readValue(login, Authority[].class);
             return Arrays.asList(r);
         } catch (IOException e) {
@@ -107,7 +107,7 @@ public class RurlServiceImp implements RurlService {
     @Override
     public boolean hasLoginRight(String appName, String account) {
         try {
-            String login = FindService.loadHttpClient().get(host + "/login/account", "appname", appName, "account", account);
+            String login = FindService.loadHttpClient().get(host + "/app/account/login", "appName", appName, "account", account);
             AjaxMessage msg = mapper.readValue(login, AjaxMessage.class);
             return msg.isSuccess();
         } catch (IOException e) {
