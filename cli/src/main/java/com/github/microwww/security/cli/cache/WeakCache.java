@@ -15,28 +15,18 @@ public class WeakCache implements CommonCache {
     }
 
     @Override
-    public void cache(String key, String o) {
-        map.put(key, o);
+    public void cache(String key, Serializable o, long expSeconds) {
+        this.cache(key, o);
     }
 
     @Override
-    public void cacheJson(String key, Object o) {
-        map.put(key, o);
+    public <T extends Serializable> T getCacheSerializable(String key, Class<T> clazz) {
+        return (T) map.get(key);
     }
 
     @Override
-    public String getCacheString(String key) {
-        return (String) map.get(key);
-    }
-
-    @Override
-    public Serializable getCacheSerializable(String key) {
-        return (Serializable) map.get(key);
-    }
-
-    @Override
-    public Object getCacheJson(String key) {
-        return map.get(key);
+    public <T> T getCache(String key, Class<T> clazz) {
+        return (T) map.get(key);
     }
 
     @Override

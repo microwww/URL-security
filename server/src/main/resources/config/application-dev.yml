@@ -1,0 +1,30 @@
+#####################
+##### DEV
+#debug: true
+#
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.1.1:3306/rurl?useUnicode=true&characterEncoding=UTF8
+    username: root
+    password: 123456
+#    jpa:
+#      show-sql: true
+  jpa:
+    generate-ddl: true
+  redis:
+    database: 7
+    host: 192.168.1.1
+    port: 6379
+#
+#logging:
+#  level:
+#    org.springframework.web.servlet.mvc: error
+
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      enabled: true
+      prefix: ${spring.application.name:spring-boot}
+#

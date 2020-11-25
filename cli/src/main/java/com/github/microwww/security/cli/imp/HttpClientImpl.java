@@ -11,14 +11,36 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class HttpClientImpl implements HttpClient {
     private static final List<String> utf8 = Collections.singletonList("text/html; charset=utf-8");
     private static final Charset UTF_8 = Charset.forName("UTF-8");
 
+    private static final Consumer noop = cnn -> {
+    };
+
+    private static final BiConsumer<HttpURLConnection, Map<String, String>> append = (cnn, header) -> {
+        header.forEach((k, v) -> {
+            try {
+                cnn.setRequestProperty(k, URLEncoder.encode(v, UTF_8.name()));
+            } catch (UnsupportedEncodingException e) {
+            }
+        });
+    };
+
     @Override
     public String get(String url, String... param) throws IOException {
-        HttpURLConnection request = getRequest(url, param);
+        HttpURLConnection request = getRequest(url, noop, param);
+        return readString(request);
+    }
+
+    @Override
+    public String getWithHeader(String url, Map<String, String> headers, String... param) throws IOException {
+        HttpURLConnection request = getRequest(url, (cnn) -> {
+            append.accept(cnn, headers);
+        }, param);
         return readString(request);
     }
 
@@ -39,7 +61,7 @@ public class HttpClientImpl implements HttpClient {
         return buf.toString();
     }
 
-    public HttpURLConnection getRequest(String url, String... param) throws IOException {
+    public HttpURLConnection getRequest(String url, Consumer<HttpURLConnection> consumer, String... param) throws IOException {
         StringBuilder buf = new StringBuilder(url);
         if (url.indexOf('?') >= 0 && !url.endsWith("&")) {
             buf.append("&");
@@ -50,6 +72,10 @@ public class HttpClientImpl implements HttpClient {
         cnn.setRequestMethod("GET");
         cnn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         cnn.setRequestProperty("connection", "Keep-Alive");
+
+        // header
+        consumer.accept(cnn);
+
         cnn.connect();
         int code = cnn.getResponseCode();
         if (code == HttpURLConnection.HTTP_OK) {
@@ -81,21 +107,28 @@ public class HttpClientImpl implements HttpClient {
 
     @Override
     public String post(String url, String... param) throws IOException {
-        return readString(requestPost(url, param));
+        HttpURLConnection request = requestPost(url, noop, param);
+        return readString(request);
     }
 
     @Override
-    public String post(String url, Map<String, String> param) throws IOException {
-        String[] arr = map2array(param);
-        return this.post(url, arr);
+    public String postWithHeader(String url, Map<String, String> headers, String... param) throws IOException {
+        HttpURLConnection request = requestPost(url, (cnn) -> {
+            append.accept(cnn, headers);
+        }, param);
+        return readString(request);
     }
 
-    public HttpURLConnection requestPost(String url, String... param) throws IOException {
+    public HttpURLConnection requestPost(String url, Consumer<HttpURLConnection> consumer, String... param) throws IOException {
         HttpURLConnection cnn = (HttpURLConnection) new URL(url).openConnection(); //login(account, password);
         cnn.setDoInput(true);
         cnn.setRequestMethod("POST");
         cnn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         cnn.setRequestProperty("connection", "Keep-Alive");
+
+        // add header
+        consumer.accept(cnn);
+
         cnn.connect();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(cnn.getOutputStream(), UTF_8));
         String req = join(new StringBuilder(), param).toString();

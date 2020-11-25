@@ -16,7 +16,7 @@ public class AbstractAntPathRightFilter extends AbstractRightFilter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         super.init(filterConfig);
-        String skips = Rconfig.getSkipurl();
+        String skips = Rconfig.getSkipUrl();
         skipURL = StringUtils.tokenizeToStringArray(skips, ",;\t", true, true);
     }
 

@@ -4,7 +4,7 @@ import com.github.microwww.security.cli.cache.CommonCache;
 import com.github.microwww.security.cli.cache.WeakCache;
 import com.github.microwww.security.cli.help.Rconfig;
 import com.github.microwww.security.cli.imp.HttpClientImpl;
-import com.github.microwww.security.cli.imp.RurlServiceImp;
+import com.github.microwww.security.cli.imp.AuthorityServiceImp;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -28,9 +28,9 @@ public class FindService {
 
     public static AccountAuthorityService loadAuthorityService() {
         return find.load(AccountAuthorityService.class, () -> {
-            String name = Rconfig.getAppName();
+            String name = Rconfig.getAppId();
             String server = Rconfig.getRurlServer();
-            return new RurlServiceImp(name, server);
+            return new AuthorityServiceImp(name, server, Rconfig.getAppSecurity());
         });
     }
 

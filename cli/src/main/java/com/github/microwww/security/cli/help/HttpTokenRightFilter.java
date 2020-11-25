@@ -26,8 +26,7 @@ public class HttpTokenRightFilter extends AbstractAntPathRightFilter {
     @Override
     protected Account getLogin(HttpServletRequest request) {
         String token = tokenStore.getToken(request, tokenName);
-        Object em = FindService.loadCache().getCacheJson("Employee:token:" + token);
-        return (Account) em;
+        return FindService.loadCache().getCache("Employee:token:" + token, Account.class);
     }
 
     public enum TokenStore {

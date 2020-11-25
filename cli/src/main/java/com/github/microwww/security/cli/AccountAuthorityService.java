@@ -1,19 +1,19 @@
 
 package com.github.microwww.security.cli;
 
+import com.github.microwww.security.cli.dto.App;
+import com.github.microwww.security.cli.dto.Authority;
+import com.github.microwww.security.cli.dto.Token;
+
 import java.util.List;
 import java.util.Set;
-
-import com.github.microwww.security.cli.dto.App;
-import com.github.microwww.security.cli.dto.Account;
-import com.github.microwww.security.cli.dto.Authority;
 
 /**
  * @author changshu.li
  */
 public interface AccountAuthorityService {
 
-    Account login(String account, String password) throws NoRightException;
+    Token author(String appId, String appSecurity) throws NoRightException;
 
     List<Authority> listAuthorityByAccount(String account);
 
@@ -25,6 +25,6 @@ public interface AccountAuthorityService {
 
     App getApplication();
 
-    boolean hasLoginRight(String appName, String account);
+    boolean hasLoginRight(String account);
 
 }

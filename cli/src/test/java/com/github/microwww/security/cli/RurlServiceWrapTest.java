@@ -8,18 +8,19 @@ import java.util.Set;
 import com.github.microwww.security.cli.dto.App;
 import com.github.microwww.security.cli.dto.Account;
 import com.github.microwww.security.cli.dto.Authority;
+import com.github.microwww.security.cli.dto.Token;
 import com.github.microwww.security.cli.help.Rconfig;
-import com.github.microwww.security.cli.imp.RurlServiceImp;
+import com.github.microwww.security.cli.imp.AuthorityServiceImp;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
- *
  * @author lcs
  */
 public class RurlServiceWrapTest {
 
-    AccountAuthorityService instance = new RurlServiceImp("simple", "https://www.baidu.com/api");
+    AccountAuthorityService instance = new AuthorityServiceImp("simple", "security", "https://www.baidu.com/api");
 
     @Test
     public void testListUrlRight() {
@@ -49,8 +50,8 @@ public class RurlServiceWrapTest {
         System.out.println("login");
         String account = "1";
         String password = "1";
-        Account result = instance.login(account, password);
-        assertEquals(account, result.getAccount());
+        Token result = instance.author(account, password);
+        assertNotNull(result.getToken());
     }
 
     @Test
@@ -68,6 +69,6 @@ public class RurlServiceWrapTest {
     public void testGetApplication() {
         System.out.println("getApplication");
         App result = instance.getApplication();
-        assertEquals(Rconfig.getAppName(), result.getAppName());
+        assertEquals(Rconfig.getAppId(), result.getAppId());
     }
 }

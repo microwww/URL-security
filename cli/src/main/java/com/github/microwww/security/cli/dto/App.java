@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class App implements Serializable {
 
     private int id;
-    private String appName;
+    private String appId;
     private String name;
     private String description;
 
@@ -23,12 +23,12 @@ public class App implements Serializable {
         this.id = id;
     }
 
-    public String getAppName() {
-        return appName;
+    public String getAppId() {
+        return appId;
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getName() {

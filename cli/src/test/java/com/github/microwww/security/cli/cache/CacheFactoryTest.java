@@ -3,6 +3,9 @@ package com.github.microwww.security.cli.cache;
 
 import com.github.microwww.security.cli.dto.Account;
 import org.junit.Test;
+
+import java.io.Serializable;
+
 import static org.junit.Assert.*;
 
 /**
@@ -19,10 +22,10 @@ public class CacheFactoryTest {
     @Test
     public void testGetCacheJson() {
         System.out.println("getCommonCache");
-        Object expResult = "vvvv" + System.currentTimeMillis();
+        Serializable expResult = "vvvv" + System.currentTimeMillis();
         String key = expResult.toString();
-        cache.cacheJson(key, expResult);
-        Object result = cache.getCacheJson(key);
+        cache.cache(key, expResult);
+        Object result = cache.getCache(key, String.class);
         assertEquals(expResult, result);
     }
 
@@ -34,7 +37,7 @@ public class CacheFactoryTest {
         Account o = new Account();
         o.setAccount(expResult.toString());
         cache.cache(key, o);
-        Account result = (Account) cache.getCacheSerializable(key);
+        Account result = cache.getCacheSerializable(key, Account.class);
         assertEquals(expResult, result.getAccount());
     }
 
@@ -49,7 +52,7 @@ public class CacheFactoryTest {
         Account o = new Account();
         o.setAccount(expResult.toString());
         cache.cache(key, o);
-        Account result = (Account) cache.getCacheSerializable(key);
+        Account result = cache.getCacheSerializable(key, Account.class);
         assertEquals(expResult, result.getAccount());
     }
 

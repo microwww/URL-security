@@ -57,7 +57,7 @@ public class Rconfig {
         return getConfig("login_page", null);
     }
 
-    public static String getSkipurl() {
+    public static String getSkipUrl() {
         return getConfig("skip_url", "");
     }
 
@@ -65,12 +65,16 @@ public class Rconfig {
         return Boolean.parseBoolean(getConfig("query_on", "false"));
     }
 
-    public static String getAppName() {
-        return getConfig("appName", "");
+    public static String getAppId() {
+        return getConfig("appId", "");
+    }
+
+    public static String getAppSecurity() {
+        return getConfig("appSecurity", "");
     }
 
     public static String getCachePrefix() {
-        return getConfig("cache_prefix", "rurl-cli-cache_prefix." + getAppName());
+        return getConfig("cache_prefix", "rurl-cli-cache_prefix." + getAppId());
     }
 
     public static String getCacheTime() {

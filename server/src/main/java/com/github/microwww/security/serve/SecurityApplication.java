@@ -1,4 +1,4 @@
-package com.github.microwww.security.cli;
+package com.github.microwww.security.serve;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

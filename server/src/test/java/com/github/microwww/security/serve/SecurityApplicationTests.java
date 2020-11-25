@@ -1,13 +1,13 @@
-package com.github.microwww.security.cli;
+package com.github.microwww.security.serve;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SecurityApplicationTests {
+public class SecurityApplicationTests {
 
     @Test
-    void contextLoads() {
+    public void main() {
     }
 
 }

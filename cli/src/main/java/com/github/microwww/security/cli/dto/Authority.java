@@ -9,11 +9,15 @@ import java.io.Serializable;
  */
 public class Authority implements Serializable {
 
+    public enum Type {
+        URL, MENU;
+    }
+
     private int id;
     private String name;
     private int webappId;
     private String uri;
-    private int type;
+    private String type;
     private int sort;
     private int parentId;
     private String description;
@@ -50,11 +54,11 @@ public class Authority implements Serializable {
         this.uri = uri;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 
