@@ -14,10 +14,7 @@ import com.github.microwww.security.serve.vo.WebappValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,12 +52,12 @@ public class ClientController extends WebappAuthorController {
         return new Token().setToken(uuid).setExpSeconds(OVER_TIME_SECONDS - 60);
     }
 
-    @RequestMapping("/login")
+    @PostMapping("/login")
     public AccountValue login(@RequestParam String account, @RequestParam String password) {
         throw new UnsupportedOperationException();
     }
 
-    @RequestMapping("/account/authority")
+    @GetMapping("/account/authority")
     public List<AuthorityValue.Simple> authorityByAccount(@RequestParam String account) {
         Webapp login = this.getLogin();
         Account acc = accountService.findByAccount(account).orElseThrow(() -> new ExistException.NotExist(Account.class));
@@ -73,20 +70,20 @@ public class ClientController extends WebappAuthorController {
         return values.stream().map(RoleAuthority::getAuthority).map(AuthorityValue.Simple::new).collect(Collectors.toList());
     }
 
-    @RequestMapping("/app/authority")
+    @GetMapping("/app/authority")
     public List<AuthorityValue.Simple> authorityByWebapp() {
         Webapp login = this.getLogin();
         Page<Authority> rol = authorityService.findByWebapp(login, 0, 100);
         return rol.stream().map(AuthorityValue.Simple::new).collect(Collectors.toList());
     }
 
-    @RequestMapping("/authority/save.url")
+    @PostMapping("/authority/save.url")
     public List<AuthorityValue.Simple> saveAuthority(@RequestParam String[] url) {
         Webapp webapp = this.getLogin();
         return authorityService.save(webapp, url).stream().map(AuthorityValue.Simple::new).collect(Collectors.toList());
     }
 
-    @RequestMapping("/app.info")
+    @GetMapping("/app.info")
     public WebappValue.Simple appInfo() {
         Webapp login = this.getLogin();
         Optional<Webapp> app = webappService.findByAppId(login.getAppId());
