@@ -1,6 +1,5 @@
 package com.github.microwww.security.serve.domain;
 
-import java.io.Serializable;
 import java.util.*;
 import javax.persistence.*;
 
@@ -10,13 +9,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "account")
-public class Account implements Serializable {
+public class Account extends AbstractBasicEntity {
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @Column(columnDefinition = "INT")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
     @Basic
     @Column(nullable = false, length = 45)
@@ -46,10 +40,6 @@ public class Account implements Serializable {
     public Account() {
     }
 
-    public Account(int id) {
-        this.id = id;
-    }
-
     public String getAccount() {
         return account;
     }
@@ -72,14 +62,6 @@ public class Account implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

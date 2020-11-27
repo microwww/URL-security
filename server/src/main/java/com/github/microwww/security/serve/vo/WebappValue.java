@@ -1,6 +1,7 @@
 package com.github.microwww.security.serve.vo;
 
 import com.github.microwww.security.serve.domain.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,72 @@ public class WebappValue {
         public List<AuthorityValue.Simple> getAuthoritys() {
             List<Authority> list = super.domain.getAuthoritys();
             return list.stream().map(AuthorityValue.Simple::new).collect(Collectors.toList());
+        }
+    }
+
+    public static class Form extends ID {
+        private String appId;
+        private String appSecurity;
+        private String name;
+        private boolean allLogin;
+        private boolean disable;
+        private String description;
+        private RoleValue.Form role;
+
+        public String getAppId() {
+            return appId;
+        }
+
+        public void setAppId(String appId) {
+            this.appId = appId;
+        }
+
+        public String getAppSecurity() {
+            return appSecurity;
+        }
+
+        public void setAppSecurity(String appSecurity) {
+            this.appSecurity = appSecurity;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public boolean isAllLogin() {
+            return allLogin;
+        }
+
+        public void setAllLogin(boolean allLogin) {
+            this.allLogin = allLogin;
+        }
+
+        public boolean isDisable() {
+            return disable;
+        }
+
+        public void setDisable(boolean disable) {
+            this.disable = disable;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public RoleValue.Form getRole() {
+            return role;
+        }
+
+        public void setRole(RoleValue.Form role) {
+            this.role = role;
         }
     }
 }

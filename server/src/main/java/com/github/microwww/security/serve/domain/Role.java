@@ -9,12 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "role")
-public class Role {
-
-    @Id
-    @Column(columnDefinition = "INT")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Role extends AbstractBasicEntity {
 
     @Basic
     @Column(nullable = false, length = 45)
@@ -40,10 +35,6 @@ public class Role {
     public Role() {
     }
 
-    public Role(int id) {
-        this.id = id;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -58,14 +49,6 @@ public class Role {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

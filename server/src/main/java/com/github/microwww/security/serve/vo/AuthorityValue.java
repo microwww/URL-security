@@ -1,8 +1,10 @@
 package com.github.microwww.security.serve.vo;
 
-import com.github.microwww.security.serve.domain.*;
+import com.github.microwww.security.serve.domain.Authority;
+import com.github.microwww.security.serve.domain.RoleAuthority;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class AuthorityValue {
@@ -71,6 +73,72 @@ public abstract class AuthorityValue {
         public List<RoleAuthorityValue.Simple> getRoleAuthoritys() {
             List<RoleAuthority> list = super.domain.getRoleAuthoritys();
             return list.stream().map(RoleAuthorityValue.Simple::new).collect(Collectors.toList());
+        }
+    }
+
+    public static class Form extends ID {
+        private String name;
+        private String uri;
+        private Authority.Type type;
+        private int sort;
+        private String description;
+        private AuthorityValue.Form authority;
+        private WebappValue.Form webapp;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getUri() {
+            return uri;
+        }
+
+        public void setUri(String uri) {
+            this.uri = uri;
+        }
+
+        public Authority.Type getType() {
+            return type;
+        }
+
+        public void setType(Authority.Type type) {
+            this.type = type;
+        }
+
+        public int getSort() {
+            return sort;
+        }
+
+        public void setSort(int sort) {
+            this.sort = sort;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public Form getAuthority() {
+            return authority;
+        }
+
+        public void setAuthority(Form authority) {
+            this.authority = authority;
+        }
+
+        public WebappValue.Form getWebapp() {
+            return webapp;
+        }
+
+        public void setWebapp(WebappValue.Form webapp) {
+            this.webapp = webapp;
         }
     }
 }

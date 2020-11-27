@@ -9,12 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "role_account")
-public class RoleAccount {
-
-    @Id
-    @Column(columnDefinition = "INT")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class RoleAccount extends AbstractBasicEntity {
 
     @Basic
     @Column(name = "create_time", columnDefinition = "TIMESTAMP", nullable = false)
@@ -31,10 +26,6 @@ public class RoleAccount {
     public RoleAccount() {
     }
 
-    public RoleAccount(int id) {
-        this.id = id;
-    }
-
     public Account getAccount() {
         return account;
     }
@@ -49,14 +40,6 @@ public class RoleAccount {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Role getRole() {

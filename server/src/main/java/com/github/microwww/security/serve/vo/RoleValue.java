@@ -1,6 +1,11 @@
 package com.github.microwww.security.serve.vo;
 
 import com.github.microwww.security.serve.domain.*;
+
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,5 +57,26 @@ public abstract class RoleValue {
             return list.stream().map(RoleAuthorityValue.Simple::new).collect(Collectors.toList());
         }
 
+    }
+
+    public static class Form extends ID {
+        private AuthorityValue.Form authority;
+        private RoleValue.Form role;
+
+        public AuthorityValue.Form getAuthority() {
+            return authority;
+        }
+
+        public void setAuthority(AuthorityValue.Form authority) {
+            this.authority = authority;
+        }
+
+        public Form getRole() {
+            return role;
+        }
+
+        public void setRole(Form role) {
+            this.role = role;
+        }
     }
 }

@@ -1,7 +1,8 @@
 package com.github.microwww.security.serve.vo;
 
-import com.github.microwww.security.serve.domain.*;
-import java.util.*;
+import com.github.microwww.security.serve.domain.RoleAccount;
+
+import java.util.Date;
 
 public abstract class RoleAccountValue {
 
@@ -39,6 +40,27 @@ public abstract class RoleAccountValue {
 
         public More(RoleAccount domain) {
             super(domain);
+        }
+    }
+
+    public static class Form extends ID {
+        private AccountValue.Form account;
+        private RoleValue.Form role;
+
+        public AccountValue.Form getAccount() {
+            return account;
+        }
+
+        public void setAccount(AccountValue.Form account) {
+            this.account = account;
+        }
+
+        public RoleValue.Form getRole() {
+            return role;
+        }
+
+        public void setRole(RoleValue.Form role) {
+            this.role = role;
         }
     }
 }

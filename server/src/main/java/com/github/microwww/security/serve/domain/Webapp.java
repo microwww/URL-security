@@ -10,14 +10,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "webapp")
-public class Webapp implements Serializable {
-
+public class Webapp extends AbstractBasicEntity {
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @Column(columnDefinition = "INT")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
     @Basic
     @Column(name = "app_id", nullable = false)
@@ -53,10 +47,6 @@ public class Webapp implements Serializable {
     private Role role;
 
     public Webapp() {
-    }
-
-    public Webapp(int id) {
-        this.id = id;
     }
 
     public boolean isAllLogin() {
@@ -105,14 +95,6 @@ public class Webapp implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

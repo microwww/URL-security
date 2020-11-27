@@ -9,16 +9,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "authority")
-public class Authority {
+public class Authority extends AbstractBasicEntity {
 
     public enum Type {
         URL, MENU;
     }
-
-    @Id
-    @Column(columnDefinition = "INT")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
     @Basic
     @Column(length = 45)
@@ -60,10 +55,6 @@ public class Authority {
     public Authority() {
     }
 
-    public Authority(int id) {
-        this.id = id;
-    }
-
     public Authority getAuthority() {
         return authority;
     }
@@ -94,14 +85,6 @@ public class Authority {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
