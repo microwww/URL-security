@@ -53,6 +53,7 @@ public class AuthorityServiceImp implements AccountAuthorityService {
         return token;
     }
 
+    @Override
     public Account login(String account, String password) throws NoRightException {
         try {
             String token = author().getToken();
