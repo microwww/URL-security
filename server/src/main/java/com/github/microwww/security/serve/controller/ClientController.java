@@ -4,6 +4,7 @@ import com.github.microwww.security.cli.dto.Token;
 import com.github.microwww.security.serve.config.ApiAuthenticationService;
 import com.github.microwww.security.serve.domain.*;
 import com.github.microwww.security.serve.exception.ExistException;
+import com.github.microwww.security.serve.exception.HttpRequestException;
 import com.github.microwww.security.serve.service.AccountService;
 import com.github.microwww.security.serve.service.AuthorityService;
 import com.github.microwww.security.serve.service.RoleAccountService;
@@ -15,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 public class ClientController extends WebappAuthorController {
 
     public static int OVER_TIME_SECONDS = 10 * 24 * 60 * 60; // 10 DAY
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     @Autowired
     RoleAuthorityService roleAuthorityService;
     @Autowired
@@ -56,8 +59,15 @@ public class ClientController extends WebappAuthorController {
 
     @ApiOperation("用户登陆认证")
     @PostMapping("/login")
-    public AccountValue login(@RequestParam String account, @RequestParam String password) {
-        throw new UnsupportedOperationException();
+    public AccountValue.Simple login(@RequestParam String account, @RequestParam String password) {
+        Account acc = accountService.findByAccount(account).orElseThrow(() -> new ExistException.NotExist(Account.class));
+        AuthAccount auth = accountService.findAuthAccount(acc).orElseThrow(() -> new ExistException.NotExist(AuthAccount.class));
+        String key = auth.getKey();
+        String encode = encoder.encode(password);
+        if (encode.equals(key)) {
+            return new AccountValue.Simple(acc);
+        }
+        throw HttpRequestException.newI18N("username.password.error");
     }
 
     @ApiOperation("用户的权限列表")
