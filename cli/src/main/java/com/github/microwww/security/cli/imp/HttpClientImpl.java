@@ -1,6 +1,7 @@
 package com.github.microwww.security.cli.imp;
 
 import com.github.microwww.security.cli.HttpClient;
+import com.github.microwww.security.cli.HttpCodeException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -44,11 +45,15 @@ public class HttpClientImpl implements HttpClient {
         return readString(request);
     }
 
-    public static String readString(HttpURLConnection request) throws IOException {
-        String ct = request.getHeaderFields().getOrDefault("content-type", utf8).get(0).toLowerCase();
+    public static String readString(HttpURLConnection connection) throws IOException {
+        return readString(connection, connection.getInputStream());
+    }
+
+    public static String readString(HttpURLConnection connection, InputStream inputStream) throws IOException {
+        String ct = connection.getHeaderFields().getOrDefault("content-type", utf8).get(0).toLowerCase();
         Charset charset = parseContentType(ct, UTF_8);
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream(), charset));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, charset));
         StringBuilder buf = new StringBuilder();
         char[] ch = new char[10240];
         while (true) {
@@ -62,14 +67,18 @@ public class HttpClientImpl implements HttpClient {
     }
 
     public HttpURLConnection getRequest(String url, Consumer<HttpURLConnection> consumer, String... param) throws IOException {
+        // System.out.println("Request GET :" + url);
         StringBuilder buf = new StringBuilder(url);
         if (url.indexOf('?') >= 0 && !url.endsWith("&")) {
             buf.append("&");
+        } else {
+            buf.append("?");
         }
         join(buf, param);
         URL u = new URL(buf.toString());
         HttpURLConnection cnn = (HttpURLConnection) u.openConnection(); //login(account, password);
         cnn.setRequestMethod("GET");
+        cnn.setDoOutput(true);
         cnn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         cnn.setRequestProperty("connection", "Keep-Alive");
 
@@ -81,7 +90,8 @@ public class HttpClientImpl implements HttpClient {
         if (code == HttpURLConnection.HTTP_OK) {
             return cnn;
         }
-        throw new IOException("Request Not 200 !" + url);
+        String msg = String.format("Request Not 200 but : [%d] ! %s", code, url);
+        throw new HttpCodeException(msg).setCode(code).setErrorMessage(readString(cnn, cnn.getErrorStream()));
     }
 
     // content-type: text/html; charset=utf-8
@@ -122,6 +132,7 @@ public class HttpClientImpl implements HttpClient {
     public HttpURLConnection requestPost(String url, Consumer<HttpURLConnection> consumer, String... param) throws IOException {
         HttpURLConnection cnn = (HttpURLConnection) new URL(url).openConnection(); //login(account, password);
         cnn.setDoInput(true);
+        cnn.setDoOutput(true);
         cnn.setRequestMethod("POST");
         cnn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         cnn.setRequestProperty("connection", "Keep-Alive");
@@ -138,7 +149,8 @@ public class HttpClientImpl implements HttpClient {
         if (code == HttpURLConnection.HTTP_OK) {
             return cnn;
         }
-        throw new IOException("Request Not 200 !" + url);
+        String msg = String.format("Request Not 200 but : [%d] ! %s", code, url);
+        throw new HttpCodeException(msg).setCode(code).setErrorMessage(readString(cnn, cnn.getErrorStream()));
     }
 
     private static StringBuilder join(StringBuilder writer, String[] param) throws IOException {

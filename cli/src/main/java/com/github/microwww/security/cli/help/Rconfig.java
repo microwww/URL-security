@@ -66,11 +66,11 @@ public class Rconfig {
     }
 
     public static String getAppId() {
-        return getConfig("appId", "");
+        return getConfig("app_id", "");
     }
 
     public static String getAppSecurity() {
-        return getConfig("appSecurity", "");
+        return getConfig("app_security", "");
     }
 
     public static String getCachePrefix() {
@@ -81,8 +81,8 @@ public class Rconfig {
         return getConfig("cache_time", "3600");
     }
 
-    public static String getRurlServer() {
-        return getConfig("rurl_server", "");
+    public static String getServerHost() {
+        return getConfig("server_host", "");
     }
 
     public static boolean isCollectUrl() {

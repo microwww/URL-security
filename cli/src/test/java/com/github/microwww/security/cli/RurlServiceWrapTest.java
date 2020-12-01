@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  */
 public class RurlServiceWrapTest {
 
-    AccountAuthorityService instance = new AuthorityServiceImp("simple", "security", "https://www.baidu.com/api");
+    AccountAuthorityService instance = new AuthorityServiceImp("https://www.baidu.com/api", "simple", "security");
 
     @Test
     public void testListUrlRight() {

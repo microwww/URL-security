@@ -28,9 +28,8 @@ public class FindService {
 
     public static AccountAuthorityService loadAuthorityService() {
         return find.load(AccountAuthorityService.class, () -> {
-            String name = Rconfig.getAppId();
-            String server = Rconfig.getRurlServer();
-            return new AuthorityServiceImp(name, server, Rconfig.getAppSecurity());
+            String server = Rconfig.getServerHost();
+            return new AuthorityServiceImp(server, Rconfig.getAppId(), Rconfig.getAppSecurity());
         });
     }
 
@@ -50,7 +49,7 @@ public class FindService {
                     } else {
                         t = supplier.get();
                     }
-                    t = (T) map.putIfAbsent(service, t);
+                    map.putIfAbsent(service, t);
                 }
             }
         }

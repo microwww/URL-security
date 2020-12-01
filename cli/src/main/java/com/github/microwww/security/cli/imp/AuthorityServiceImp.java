@@ -1,15 +1,10 @@
 
 package com.github.microwww.security.cli.imp;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.microwww.security.cli.AccountAuthorityService;
-import com.github.microwww.security.cli.AjaxMessage;
-import com.github.microwww.security.cli.FindService;
-import com.github.microwww.security.cli.NoRightException;
-import com.github.microwww.security.cli.dto.Account;
-import com.github.microwww.security.cli.dto.App;
-import com.github.microwww.security.cli.dto.Authority;
-import com.github.microwww.security.cli.dto.Token;
+import com.github.microwww.security.cli.*;
+import com.github.microwww.security.cli.dto.*;
 import com.github.microwww.security.cli.help.StringUtils;
 
 import java.io.IOException;
@@ -20,15 +15,16 @@ import java.util.*;
  */
 public class AuthorityServiceImp implements AccountAuthorityService {
 
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static ObjectMapper mapper = new ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     private final String appId;
     private final String appSecurity;
     private final String host;
 
-    public AuthorityServiceImp(String appId, String appSecurity, String host) {
+    public AuthorityServiceImp(String host, String appId, String appSecurity) {
+        this.host = host;
         this.appId = appId;
         this.appSecurity = appSecurity;
-        this.host = host;
     }
 
     @Override
@@ -37,7 +33,7 @@ public class AuthorityServiceImp implements AccountAuthorityService {
             String login = FindService.loadHttpClient().post(host + "/auth", "appId", this.appId, "appSecurity", this.appSecurity);
             Token token = mapper.readValue(login, Token.class);
             if (!StringUtils.isEmpty(token.getToken())) {
-                FindService.loadCache().cache("server:token", token.getToken());
+                FindService.loadCache().cache("server:token", token);
             }
             return token;
         } catch (IOException e) {
@@ -58,11 +54,20 @@ public class AuthorityServiceImp implements AccountAuthorityService {
         try {
             String token = author().getToken();
             if (this.hasLoginRight(account)) {
-                String login = FindService.loadHttpClient().postWithHeader(
-                        host + "/login",
-                        Collections.singletonMap("token", token),
-                        "account", account, "password", password);
-                return mapper.readValue(login, Account.class);
+                try {
+                    String login = FindService.loadHttpClient().postWithHeader(
+                            host + "/login",
+                            Collections.singletonMap("token", token),
+                            "account", account, "password", password);
+                    return mapper.readValue(login, Account.class);
+                } catch (HttpCodeException ex) {
+                    String mess = ex.getErrorMessage();
+                    ErrorMessage error = mapper.readValue(mess, ErrorMessage.class);
+                    if ("HttpRequestException".equals(error.getException())) {
+                        throw new NoRightException(-2, "用户名密码错误!");
+                    }
+                    throw ex;
+                }
             }
             throw new NoRightException(-3, String.format("您（%s）没有登录该应用（%s）的权限!", account, appId));
         } catch (IOException e) {
@@ -155,7 +160,7 @@ public class AuthorityServiceImp implements AccountAuthorityService {
             String login = FindService.loadHttpClient().getWithHeader(
                     host + "/app/account/login",
                     Collections.singletonMap("token", token),
-                    "appId", appId, "account", account);
+                    "account", account);
             AjaxMessage msg = mapper.readValue(login, AjaxMessage.class);
             return msg.isSuccess();
         } catch (IOException e) {
