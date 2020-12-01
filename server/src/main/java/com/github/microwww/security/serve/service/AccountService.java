@@ -1,8 +1,10 @@
 package com.github.microwww.security.serve.service;
 
 import com.github.microwww.security.serve.domain.Account;
+import com.github.microwww.security.serve.domain.AuthAccount;
 import com.github.microwww.security.serve.exception.ExistException;
 import com.github.microwww.security.serve.repository.AccountRepository;
+import com.github.microwww.security.serve.repository.AuthAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +20,8 @@ public class AccountService {
 
     @Autowired()
     private AccountRepository accountRepository;
+    @Autowired()
+    private AuthAccountRepository authAccountRepository;
 
     public AccountRepository getAccountRepository() {
         return accountRepository;
@@ -48,5 +52,9 @@ public class AccountService {
 
     public Optional<Account> findByAccount(String account) {
         return Optional.ofNullable(this.accountRepository.findByAccount(account));
+    }
+
+    public Optional<AuthAccount> findAuthAccount(Account account) {
+        return Optional.ofNullable(authAccountRepository.findByAccountAndType(account, AuthAccount.Type.PASSWORD));
     }
 }

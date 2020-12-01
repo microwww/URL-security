@@ -1,5 +1,6 @@
 package com.github.microwww.security.serve.controller;
 
+import com.github.microwww.security.cli.AjaxMessage;
 import com.github.microwww.security.cli.dto.Token;
 import com.github.microwww.security.serve.config.ApiAuthenticationService;
 import com.github.microwww.security.serve.domain.*;
@@ -44,9 +45,9 @@ public class ClientController extends WebappAuthorController {
 
     @ApiOperation("webapp登陆认证")
     @PostMapping("/auth")
-    public Token author(@RequestParam String appId, @RequestParam String security) {
+    public Token author(@RequestParam String appId, @RequestParam String appSecurity) {
         Webapp webapp = webappService.findByAppId(appId).orElseThrow(() -> new ExistException.NotExist(Webapp.class));
-        if (!security.equalsIgnoreCase(webapp.getAppSecurity())) {
+        if (!appSecurity.equalsIgnoreCase(webapp.getAppSecurity())) {
             throw new ExistException.NotExist(Webapp.class);
         }
         GrantedAuthority authority = ApiAuthenticationService.AuthorityType.CLIENT.getAuthority();
@@ -62,12 +63,16 @@ public class ClientController extends WebappAuthorController {
     public AccountValue.Simple login(@RequestParam String account, @RequestParam String password) {
         Account acc = accountService.findByAccount(account).orElseThrow(() -> new ExistException.NotExist(Account.class));
         AuthAccount auth = accountService.findAuthAccount(acc).orElseThrow(() -> new ExistException.NotExist(AuthAccount.class));
-        String key = auth.getKey();
-        String encode = encoder.encode(password);
-        if (encode.equals(key)) {
+        if (encoder.matches(password, auth.getKey())) {
             return new AccountValue.Simple(acc);
         }
         throw HttpRequestException.newI18N("username.password.error");
+    }
+
+    @ApiOperation("用户是否可登录")
+    @GetMapping("/app/account/login")
+    public AjaxMessage accountCanLogin(@RequestParam String account) {
+        return new AjaxMessage().setData(true);
     }
 
     @ApiOperation("用户的权限列表")
