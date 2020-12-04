@@ -22,7 +22,7 @@ export const asyncRouterMap = [
         name: 'dashboard',
         redirect: '/dashboard/workplace',
         component: RouteView,
-        meta: { title: 'menu.dashboard', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        meta: { title: 'menu.dashboard', keepAlive: true, icon: bxAnaalyse, permission: [ 'admin', 'dashboard' ] },
         children: [
           {
             path: '/dashboard/analysis/:pageNo([1-9]\\d*)?',
@@ -258,6 +258,39 @@ export const asyncRouterMap = [
                 meta: { title: '新消息通知', hidden: true, keepAlive: true, permission: [ 'user' ] }
               }
             ]
+          }
+        ]
+      },
+      {
+        path: '/webapp',
+        component: RouteView,
+        redirect: '/webapp/list',
+        name: 'webapp',
+        meta: { title: '应用', icon: 'user', keepAlive: true, permission: [ 'user' ] },
+        children: [
+          {
+            path: '/webapp/list',
+            name: 'webappList',
+            component: () => import('@/views/webapp/WebappList'),
+            meta: { title: '应用列表', keepAlive: true, permission: [ 'user' ] }
+          },
+          {
+            path: '/role/list',
+            name: 'roleList',
+            component: () => import('@/views/webapp/RoleList'),
+            meta: { title: '角色列表', keepAlive: true, permission: [ 'user' ] }
+          },
+          {
+            path: '/permission/list',
+            name: 'permissionList',
+            component: () => import('@/views/webapp/PermissionList'),
+            meta: { title: '权限列表', keepAlive: true, permission: [ 'user' ] }
+          },
+          {
+            path: '/account/list',
+            name: 'accountList',
+            component: () => import('@/views/webapp/AccountList'),
+            meta: { title: '账号列表', keepAlive: true, permission: [ 'user' ] }
           }
         ]
       }
