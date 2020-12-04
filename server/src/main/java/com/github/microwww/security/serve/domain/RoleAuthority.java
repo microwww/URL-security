@@ -8,7 +8,7 @@ import javax.persistence.*;
  * org.apache.openjpa.jdbc.meta.ReverseMappingTool$AnnotatedCodeGenerator
  */
 @Entity
-@Table(name = "role_authority")
+@Table(name = "role_permission")
 public class RoleAuthority extends AbstractBasicEntity {
 
     @Basic
@@ -16,7 +16,7 @@ public class RoleAuthority extends AbstractBasicEntity {
     private Date createTime;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "authority_id", columnDefinition = "INT", nullable = false)
+    @JoinColumn(name = "permission_id", columnDefinition = "INT", nullable = false)
     private Authority authority;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

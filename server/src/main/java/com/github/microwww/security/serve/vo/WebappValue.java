@@ -41,7 +41,7 @@ public class WebappValue {
         }
 
         public RoleValue.Simple getRole() {
-            return new RoleValue.Simple(super.domain.getRole());
+            return Optional.ofNullable(super.domain.getRole()).map(RoleValue.Simple::new).orElse(null);
         }
     }
 

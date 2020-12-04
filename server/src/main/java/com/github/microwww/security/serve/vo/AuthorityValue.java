@@ -5,6 +5,7 @@ import com.github.microwww.security.serve.domain.RoleAuthority;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public abstract class AuthorityValue {
@@ -50,8 +51,8 @@ public abstract class AuthorityValue {
             super(domain);
         }
 
-        public AuthorityValue.Simple getAuthority() {
-            return new AuthorityValue.Simple(super.domain.getAuthority());
+        public AuthorityValue.Simple getParent() {
+            return Optional.ofNullable(super.domain.getParent()).map(AuthorityValue.Simple::new).orElse(null);
         }
 
         public WebappValue.Simple getWebapp() {

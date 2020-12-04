@@ -10,10 +10,7 @@ import com.github.microwww.security.serve.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -30,11 +27,12 @@ public class RootController {
     ApiAuthenticationService apiAuthenticationService;
 
     @PostMapping("/login/account")
-    public Token login(@RequestParam String account, @RequestParam String password) {
+    public Token login(@RequestParam String username, @RequestParam String password) {
         try {
-            Account login = FindService.loadAuthorityService().login(account, password);
-            GrantedAuthority authority = ApiAuthenticationService.AuthorityType.ADMIN.getAuthority();
-            ApiAuthenticationService.ApiToken token = new ApiAuthenticationService.ApiToken(login.getAccount(), "password", authority);
+            Account login = FindService.loadAuthorityService().login(username, password);
+            GrantedAuthority user = ApiAuthenticationService.AuthorityType.USER.getAuthority();
+            GrantedAuthority admin = ApiAuthenticationService.AuthorityType.ADMIN.getAuthority();
+            ApiAuthenticationService.ApiToken token = new ApiAuthenticationService.ApiToken(login.getAccount(), "password", user, admin);
             token.setAuthenticated(true);
             String uuid = UUID.randomUUID().toString().replaceAll("-", "");
             apiAuthenticationService.save(uuid, token, OVER_TIME_SECONDS);
@@ -42,6 +40,10 @@ public class RootController {
         } catch (NoRightException e) {
             throw new HttpRequestException(e.getMessage());
         }
+    }
+
+    @GetMapping("/logout")
+    public void logout() {
     }
 
 }

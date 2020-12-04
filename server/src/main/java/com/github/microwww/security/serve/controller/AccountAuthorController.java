@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -28,19 +29,19 @@ public abstract class AccountAuthorController {
     @ModelAttribute
     public void findUserByPrincipal(Principal principal) {
         if (principal != null) {
-            Account app = getCacheUser(principal.getName()).orElseGet(() -> {
+            Account acc = getCacheUser(principal.getName()).orElseGet(() -> {
                 Optional<Account> opt = accountService.getUserByPrincipal(principal);
                 if (opt.isPresent()) {
                     refreshCache(opt.get());
                 }
                 return opt.orElse(null);
             });
-            if (app != null) {
-                if (!app.isDisable()) {
-                    local.set(app);
+            if (acc != null) {
+                if (!acc.isDisable()) {
+                    local.set(acc);
                     return; // success !
                 }
-                throw HttpRequestException.newI18N("account.is.disable", app);
+                throw HttpRequestException.newI18N("account.is.disable", acc);
             }
         }
         local.remove();
@@ -51,7 +52,7 @@ public abstract class AccountAuthorController {
     }
 
     public void refreshCache(Account user) {
-        redis.set("account:login:" + user.getAccount(), user, 1000);
+        redis.set("account:login:" + user.getAccount(), user, 1, TimeUnit.HOURS);
     }
 
     protected Account getLogin() {

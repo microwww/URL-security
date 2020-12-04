@@ -2,10 +2,6 @@ package com.github.microwww.security.serve.vo;
 
 import com.github.microwww.security.serve.domain.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,6 +34,10 @@ public abstract class RoleValue {
 
         public Info(Role domain) {
             super(domain);
+        }
+
+        public WebappValue.Simple getWebapp() {
+            return new WebappValue.Simple(domain.getWebapp());
         }
     }
 

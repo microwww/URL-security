@@ -19,6 +19,10 @@ public abstract class AccountValue {
             return super.domain.getAccount();
         }
 
+        public boolean isDisable() {
+            return domain.isDisable();
+        }
+
         public Date getCreateTime() {
             return super.domain.getCreateTime();
         }

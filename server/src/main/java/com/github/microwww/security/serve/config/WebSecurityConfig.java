@@ -48,6 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyRole(ApiAuthenticationService.AuthorityType.CLIENT.name())
                 .antMatchers("/api/admin/**")
                 .hasAnyRole(ApiAuthenticationService.AuthorityType.ADMIN.name())
+                .antMatchers("/api/me/**")
+                .hasAnyRole(ApiAuthenticationService.AuthorityType.USER.name())
                 .anyRequest().permitAll()
                 .and().csrf().disable()//
                 .sessionManagement().disable()//禁用 session
@@ -87,7 +89,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             HttpServletRequest request = (HttpServletRequest) r;
             SecurityContextHolder.getContext().setAuthentication(null);
             if (requiresAuthenticationRequestMatcher.matches(request)) {
-                String token = request.getHeader("token");
+                String token = request.getHeader("Token");
                 if (!StringUtils.isEmpty(token)) {//
                     Optional<ApiAuthenticationService.ApiToken> auth = redis.get(token);
                     if (auth.isPresent()) {

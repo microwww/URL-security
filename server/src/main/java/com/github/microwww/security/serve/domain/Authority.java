@@ -8,7 +8,7 @@ import javax.persistence.*;
  * org.apache.openjpa.jdbc.meta.ReverseMappingTool$AnnotatedCodeGenerator
  */
 @Entity
-@Table(name = "authority")
+@Table(name = "permission")
 public class Authority extends AbstractBasicEntity {
 
     public enum Type {
@@ -40,9 +40,9 @@ public class Authority extends AbstractBasicEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "parent_id", columnDefinition = "INT")
-    private Authority authority;
+    private Authority parent;
 
-    @OneToMany(targetEntity = Authority.class, mappedBy = "authority", cascade = CascadeType.MERGE)
+    @OneToMany(targetEntity = Authority.class, mappedBy = "parent", cascade = CascadeType.MERGE)
     private List<Authority> authoritys;
 
     @OneToMany(targetEntity = RoleAuthority.class, mappedBy = "authority", cascade = CascadeType.MERGE)
@@ -55,12 +55,12 @@ public class Authority extends AbstractBasicEntity {
     public Authority() {
     }
 
-    public Authority getAuthority() {
-        return authority;
+    public Authority getParent() {
+        return parent;
     }
 
-    public void setAuthority(Authority authority) {
-        this.authority = authority;
+    public void setParent(Authority authority) {
+        this.parent = authority;
     }
 
     public List<Authority> getAuthoritys() {

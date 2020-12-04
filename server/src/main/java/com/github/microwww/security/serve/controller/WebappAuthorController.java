@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -51,7 +52,7 @@ public abstract class WebappAuthorController {
     }
 
     public void refreshCache(Webapp user) {
-        redis.set("webapp:login:" + user.getAppId(), user, 1000);
+        redis.set("webapp:login:" + user.getAppId(), user, 12, TimeUnit.HOURS);
     }
 
     protected Webapp getLogin() {

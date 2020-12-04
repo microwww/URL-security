@@ -2,6 +2,7 @@ package com.github.microwww.security.serve.config;
 
 import com.github.microwww.security.serve.controller.AccountAuthorController;
 import com.github.microwww.security.serve.domain.Account;
+import com.github.microwww.security.serve.exception.HttpRequestException;
 import com.github.microwww.security.serve.exception.I18nException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,8 @@ public class GlobalExceptionHandler {
             }
             log.warn("Request [{}] error {}, User [{},{}], message : {}", //
                     uri, clazz.getSimpleName(), user.getId(), user.getAccount(), ex.getMessage());
+        } else if (ex instanceof HttpRequestException) {
+            log.warn("Request [{}] error: {}", uri, ex.getMessage());
         } else {
             log.warn("Request [{}] error: {}", uri, ex.getMessage(), ex);
         }

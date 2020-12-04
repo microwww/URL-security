@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "auth_account")
+@Table(name = "permission_account")
 public class AuthAccount extends AbstractBasicEntity {
     private static final long serialVersionUID = 1L;
 
