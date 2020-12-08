@@ -197,7 +197,7 @@ export default {
           saveWebapp(entity).then((res) => {
             this.$refs.table.refresh()
             this.domain.visible = false
-            this.$message.message('提交成功')
+            this.$message.info('提交成功')
           }).catch((e) => {
             this.$message.error('出错了 : ' + e.response.data.message)
           })

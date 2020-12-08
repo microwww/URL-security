@@ -44,22 +44,64 @@
         :data="loadData"
         showPagination="auto"
       >
+        <span slot="disableOpt" slot-scope="text, record">
+          <a-switch default-checked :checked="!record.disable" :loading="record.disableLoading" @change="(c, e) => { disableAccount(c, e, record) }" />
+        </span>
         <span slot="action" slot-scope="text, record">
-          <template>
-            <a @click="handleEdit(record)">配置</a>
-            <a-divider type="vertical" />
-            <a @click="handleSub(record)">订阅报警</a>
-          </template>
+          <a @click="handleEdit(record)">配置</a>
         </span>
       </s-table>
     </a-card>
+
+    <div>
+      <a-modal v-model="domain.visible" title="edit" :footer="null">
+        <a-form :form="editForm" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" @submit="editSubmit">
+          <a-form-item label="姓名">
+            <a-input
+              v-decorator="['name', { rules: [{ required: true, message: 'Please input your note!' }] }]"
+            />
+          </a-form-item>
+          <a-form-item label="账号">
+            <a-input
+              v-decorator="['account', { rules: [{ required: true, message: 'Please input your note!' }] }]"
+            />
+          </a-form-item>
+          <a-form-item label="状态">
+            <a-radio-group
+              v-decorator="['disable', { initialValue: false, rules: [{ required: true, message: 'Please input your note!' }] }]"
+            >
+              <a-radio :value="false">
+                启用
+              </a-radio>
+              <a-radio :value="true">
+                禁用
+              </a-radio>
+            </a-radio-group>
+          </a-form-item>
+          <a-form-item label="电话">
+            <a-input
+              v-decorator="['phone', { rules: [{ message: 'Please input your note!' }] }]"
+            />
+          </a-form-item>
+          <a-form-item label="邮箱">
+            <a-input
+              v-decorator="['email', { type: 'email', rules: [{ message: 'Please input your note!' }] }]"
+            />
+          </a-form-item>
+          <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
+            <a-button type="primary" html-type="submit">Submit</a-button>
+          </a-form-item>
+        </a-form>
+      </a-modal>
+    </div>
+
   </page-header-wrapper>
 </template>
 
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { listAccount, trimObject } from '@/api/entity'
+import { listAccount, saveAccount, trimObject } from '@/api/entity'
 
 const columns = [
   {
@@ -75,7 +117,8 @@ const columns = [
     dataIndex: 'account'
   },
   {
-    title: '禁用',
+    title: '状态',
+    scopedSlots: { customRender: 'disableOpt' },
     dataIndex: 'disable'
   },
   {
@@ -107,8 +150,11 @@ export default {
   data () {
     this.columns = columns
     return {
-      // create model
-      visible: false,
+      domain: {
+        obj: {},
+        visible: false
+      },
+      editForm: this.$form.createForm(this),
       confirmLoading: false,
       mdl: null,
       // 高级搜索 展开/关闭
@@ -135,6 +181,7 @@ export default {
         const query = Object.assign({}, parameter, { query: param })
         return listAccount(query)
           .then(res => {
+            res.content && res.content.forEach((e) => { e.disableLoading = false })
             return res
           })
       },
@@ -154,13 +201,52 @@ export default {
     }
   },
   methods: {
-    handleAdd () {
-      this.mdl = null
-      this.visible = true
+    disableAccount (checked, e, record) {
+      record.disableLoading = true
+      saveAccount({ id: record.id, disable: !checked })
+        .then((res) => {
+          record.disable = !checked
+          this.$message.info('修改成功')
+        }).catch((er) => {
+          this.$message.error('出错了 : ' + er.response.data.message)
+        }).finally(() => {
+          record.disableLoading = false
+        })
     },
     handleEdit (record) {
-      this.visible = true
-      this.mdl = { ...record }
+      this.domain.visible = true
+      this.$nextTick(() => {
+        this.domain.obj = record
+        this.showEdit(record)
+      })
+    },
+    showEdit (record) {
+      const rc = Object.assign({}, record)
+      delete rc.id
+      delete rc.createTime
+      delete rc.disableLoading
+      this.editForm.setFieldsValue(rc)
+    },
+    handleAdd () {
+      this.domain.visible = true
+      this.domain.obj = {}
+      this.editForm.resetFields()
+    },
+    editSubmit (e) {
+      e.preventDefault()
+      this.editForm.validateFields((err, values) => {
+        if (!err) {
+          // console.log('Received values of form: ', values)
+          const entity = Object.assign({}, this.domain.obj, values)
+          saveAccount(entity).then((res) => {
+            this.$refs.table.refresh()
+            this.domain.visible = false
+            this.$message.info('提交成功')
+          }).catch((e) => {
+            this.$message.error('出错了 : ' + e.response.data.message)
+          })
+        }
+      })
     },
     handleOk () {
       const form = this.$refs.createModal.form
@@ -211,13 +297,6 @@ export default {
 
       const form = this.$refs.createModal.form
       form.resetFields() // 清理表单数据（可不做）
-    },
-    handleSub (record) {
-      if (record.status !== 0) {
-        this.$message.info(`${record.no} 订阅成功`)
-      } else {
-        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
-      }
     },
     onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
