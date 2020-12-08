@@ -35,10 +35,6 @@ public class Webapp extends AbstractBasicEntity {
     @Basic
     private String description;
 
-    @Basic
-    @Column(name = "create_time", columnDefinition = "TIMESTAMP", nullable = false)
-    private Date createTime;
-
     @OneToMany(targetEntity = Authority.class, mappedBy = "webapp", cascade = CascadeType.MERGE)
     private List<Authority> authoritys;
 
@@ -79,14 +75,6 @@ public class Webapp extends AbstractBasicEntity {
 
     public void setAuthoritys(List<Authority> authoritys) {
         this.authoritys = authoritys;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
     }
 
     public String getDescription() {

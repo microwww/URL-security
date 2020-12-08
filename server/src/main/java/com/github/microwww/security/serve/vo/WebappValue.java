@@ -32,6 +32,29 @@ public class WebappValue {
         public String getName() {
             return super.domain.getName();
         }
+
+        public boolean isDisable() {
+            return domain.isDisable();
+        }
+    }
+
+    public static class Security extends AbstractDomainValue<Webapp> {
+
+        public Security(Webapp domain) {
+            super(domain);
+        }
+
+        public String getAppId() {
+            return domain.getAppId();
+        }
+
+        public String getAppSecurity() {
+            return domain.getAppSecurity();
+        }
+
+        public int getId() {
+            return domain.getId();
+        }
     }
 
     public static class Info extends Simple {

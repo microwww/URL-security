@@ -1,7 +1,6 @@
 package com.github.microwww.security.serve.domain;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "permission_account")
@@ -20,10 +19,6 @@ public class AuthAccount extends AbstractBasicEntity {
     private Type type = Type.PASSWORD;
 
     private String key;
-
-    @Basic
-    @Column(name = "create_time", columnDefinition = "TIMESTAMP", nullable = false)
-    private Date createTime;
 
     public AuthAccount() {
     }
@@ -52,11 +47,4 @@ public class AuthAccount extends AbstractBasicEntity {
         this.key = key;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }

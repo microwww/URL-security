@@ -11,10 +11,6 @@ import javax.persistence.*;
 @Table(name = "role_permission")
 public class RoleAuthority extends AbstractBasicEntity {
 
-    @Basic
-    @Column(name = "create_time", columnDefinition = "TIMESTAMP", nullable = false)
-    private Date createTime;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "permission_id", columnDefinition = "INT", nullable = false)
     private Authority authority;
@@ -32,14 +28,6 @@ public class RoleAuthority extends AbstractBasicEntity {
 
     public void setAuthority(Authority authority) {
         this.authority = authority;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
     }
 
     public Role getRole() {

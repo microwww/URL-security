@@ -90,6 +90,11 @@ public class EntityService implements ApplicationContextAware {
             ref.setRef(en.getConstructor().newInstance());
             ref.setCreate(true);
         }
+
+        filters.stream().filter(e -> e.isSupport(form.getClass(), en)).forEach(e -> {
+            e.beforeSave(form, ref.getRef());
+        });
+
         ref.copyFromIgnoreNull(form, "createTime");
 
         // 设置 ref class
@@ -110,14 +115,10 @@ public class EntityService implements ApplicationContextAware {
             }
         }
 
-        filters.stream().filter(e -> e.isSupport(form.getClass(), en)).forEach(e -> {
-            e.beforeSave(form, ref.getRef());
-        });
-
         if (ref.isCreate()) {
-            entityManager.persist(ref);
+            entityManager.persist(ref.getRef());
         } else {
-            entityManager.merge(ref);
+            entityManager.merge(ref.getRef());
         }
 
         filters.stream().filter(e -> e.isSupport(form.getClass(), en)).forEach(e -> {

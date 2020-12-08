@@ -11,10 +11,6 @@ import javax.persistence.*;
 @Table(name = "role_account")
 public class RoleAccount extends AbstractBasicEntity {
 
-    @Basic
-    @Column(name = "create_time", columnDefinition = "TIMESTAMP", nullable = false)
-    private Date createTime;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "account_id", columnDefinition = "INT", nullable = false)
     private Account account;
@@ -32,14 +28,6 @@ public class RoleAccount extends AbstractBasicEntity {
 
     public void setAccount(Account account) {
         this.account = account;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
     }
 
     public Role getRole() {
