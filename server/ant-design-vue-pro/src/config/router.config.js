@@ -275,6 +275,12 @@ export const asyncRouterMap = [
             meta: { title: '应用列表', keepAlive: true, permission: [ 'user' ] }
           },
           {
+            path: '/account/list',
+            name: 'accountList',
+            component: () => import('@/views/webapp/AccountList'),
+            meta: { title: '用户列表', keepAlive: true, permission: [ 'user' ] }
+          },
+          {
             path: '/role/list',
             name: 'roleList',
             component: () => import('@/views/webapp/RoleList'),
@@ -285,12 +291,6 @@ export const asyncRouterMap = [
             name: 'permissionList',
             component: () => import('@/views/webapp/PermissionList'),
             meta: { title: '权限列表', keepAlive: true, permission: [ 'user' ] }
-          },
-          {
-            path: '/account/list',
-            name: 'accountList',
-            component: () => import('@/views/webapp/AccountList'),
-            meta: { title: '账号列表', keepAlive: true, permission: [ 'user' ] }
           }
         ]
       }

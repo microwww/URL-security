@@ -48,13 +48,51 @@
         </span>
       </s-table>
     </a-card>
+
+    <div>
+      <a-modal v-model="domain.visible" title="edit" :footer="null">
+        <a-form :form="editForm" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" @submit="editSubmit">
+          <a-form-item label="名称">
+            <a-input
+              v-decorator="['name', { rules: [{ required: true, message: 'Please input your note!' }] }]"
+            />
+          </a-form-item>
+          <a-form-item label="APP-ID">
+            <a-input
+              v-decorator="['appId', { rules: [{ required: true, message: 'Please input your note!' }] }]"
+            />
+          </a-form-item>
+          <a-form-item label="状态">
+            <a-radio-group
+              v-decorator="['disable', { initialValue: false, rules: [{ required: true, message: 'Please input your note!' }] }]"
+            >
+              <a-radio :value="false">
+                启用
+              </a-radio>
+              <a-radio :value="true">
+                禁用
+              </a-radio>
+            </a-radio-group>
+          </a-form-item>
+          <a-form-item label="描述">
+            <a-input
+              v-decorator="['description', { rules: [{ required: true, message: 'Please input your note!' }] }]"
+            />
+          </a-form-item>
+          <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
+            <a-button type="primary" html-type="submit">Submit</a-button>
+          </a-form-item>
+        </a-form>
+      </a-modal>
+    </div>
+
   </page-header-wrapper>
 </template>
 
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { listWebapp } from '@/api/entity'
+import { listWebapp, saveWebapp } from '@/api/entity'
 
 const columns = [
   {
@@ -90,8 +128,11 @@ export default {
   data () {
     this.columns = columns
     return {
-      // create model
-      visible: false,
+      domain: {
+        obj: {},
+        visible: false
+      },
+      editForm: this.$form.createForm(this),
       confirmLoading: false,
       mdl: null,
       // 高级搜索 展开/关闭
@@ -129,13 +170,39 @@ export default {
     }
   },
   methods: {
-    handleAdd () {
-      this.mdl = null
-      this.visible = true
-    },
     handleEdit (record) {
-      this.visible = true
-      this.mdl = { ...record }
+      this.domain.visible = true
+      this.$nextTick(() => {
+        this.domain.obj = record
+        this.showEdit(record)
+      })
+    },
+    showEdit (record) {
+      const rc = Object.assign({}, record)
+      rc.id = undefined
+      delete rc.createTime
+      delete rc.role
+      this.editForm.setFieldsValue(rc)
+    },
+    handleAdd () {
+      this.domain.visible = true
+      this.editForm.setFieldsValue({})
+    },
+    editSubmit (e) {
+      e.preventDefault()
+      this.editForm.validateFields((err, values) => {
+        if (!err) {
+          // console.log('Received values of form: ', values)
+          const entity = Object.assign({}, this.domain.obj, values)
+          saveWebapp(entity).then((res) => {
+            this.$refs.table.refresh()
+            this.domain.visible = false
+            this.$message.message('提交成功')
+          }).catch((e) => {
+            this.$message.error('出错了 : ' + e.response.data.message)
+          })
+        }
+      })
     },
     handleOk () {
       const form = this.$refs.createModal.form
