@@ -81,23 +81,23 @@ public class EntityService implements ApplicationContextAware {
     }
 
     private <T> T trySaveEntity(ID form, Class<T> en) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
-        Ref<T> ref = new Ref<>();
+        Ref<T> warp = new Ref<>();
         Integer id = form.getId();
         if (id != null) {
-            ref.setRef(entityManager.find(en, id));
+            warp.setRef(entityManager.find(en, id));
         }
-        if (ref.ref == null) {
-            ref.setRef(en.getConstructor().newInstance());
-            ref.setCreate(true);
+        if (warp.ref == null) {
+            warp.setRef(en.getConstructor().newInstance());
+            warp.setCreate(true);
         }
 
         filters.stream().filter(e -> e.isSupport(form.getClass(), en)).forEach(e -> {
-            e.beforeSave(form, ref.getRef());
+            e.beforeSave(form, warp.getRef());
         });
 
-        ref.copyFromIgnoreNull(form, "createTime");
+        warp.copyFromIgnoreNull(form, "createTime");
 
-        // 设置 ref class
+        // 设置 warp class
         Field[] fields = form.getClass().getDeclaredFields();
         for (Field f : fields) {
             f.setAccessible(true);
@@ -106,25 +106,25 @@ public class EntityService implements ApplicationContextAware {
                 if (formValue != null) {
                     Integer val = ((ID) formValue).getId();
                     if (val != null) {
-                        Field dec = ref.getClass().getDeclaredField(f.getName());
+                        Field dec = warp.getRef().getClass().getDeclaredField(f.getName());
                         Object oo = entityManager.find(dec.getType(), val);
                         dec.setAccessible(true);
-                        dec.set(ref, oo);
+                        dec.set(warp.getRef(), oo);
                     }
                 }
             }
         }
 
-        if (ref.isCreate()) {
-            entityManager.persist(ref.getRef());
+        if (warp.isCreate()) {
+            entityManager.persist(warp.getRef());
         } else {
-            entityManager.merge(ref.getRef());
+            entityManager.merge(warp.getRef());
         }
 
         filters.stream().filter(e -> e.isSupport(form.getClass(), en)).forEach(e -> {
-            e.afterSave(form, ref.getRef());
+            e.afterSave(form, warp.getRef());
         });
-        return ref.getRef();
+        return warp.getRef();
     }
 
     @Override

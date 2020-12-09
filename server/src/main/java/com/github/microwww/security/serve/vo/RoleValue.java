@@ -60,23 +60,32 @@ public abstract class RoleValue {
     }
 
     public static class Form extends ID {
-        private AuthorityValue.Form authority;
-        private RoleValue.Form role;
+        private String name;
+        private String description;
+        private WebappValue.Form webapp;
 
-        public AuthorityValue.Form getAuthority() {
-            return authority;
+        public String getName() {
+            return name;
         }
 
-        public void setAuthority(AuthorityValue.Form authority) {
-            this.authority = authority;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public Form getRole() {
-            return role;
+        public String getDescription() {
+            return description;
         }
 
-        public void setRole(Form role) {
-            this.role = role;
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public WebappValue.Form getWebapp() {
+            return webapp;
+        }
+
+        public void setWebapp(WebappValue.Form webapp) {
+            this.webapp = webapp;
         }
     }
 }
