@@ -1,3 +1,4 @@
+import axios from 'axios'
 import request from '@/utils/request'
 import Qs from 'qs'
 
@@ -8,16 +9,18 @@ const api = {
 }
 
 export default api
+export { axios }
 
 // webapp
-export function listWebapp (parameter) {
+export function listWebapp (parameter, opt = {}) {
   return request({
     url: api.list,
     method: 'post',
     data: {
       ...parameter,
       entity: 'Webapp'
-    }
+    },
+    ...opt
   })
 }
 export function saveWebapp (parameter) {

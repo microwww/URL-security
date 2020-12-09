@@ -186,6 +186,7 @@ export default {
     },
     handleAdd () {
       this.domain.visible = true
+      this.domain.obj = {}
       this.editForm.setFieldsValue({})
     },
     editSubmit (e) {

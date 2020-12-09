@@ -10,7 +10,7 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="应用">
+              <a-form-item label="应用名">
                 <a-input v-model="queryParam.webappName" placeholder=""/>
               </a-form-item>
             </a-col>
@@ -53,14 +53,52 @@
         </span>
       </s-table>
     </a-card>
+
+    <div>
+      <a-modal v-model="domain.visible" title="edit" :footer="null">
+        <a-form :form="editForm" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" @submit="editSubmit">
+          <a-form-item label="名称">
+            <a-input
+              v-decorator="['name', { rules: [{ required: true, message: 'Please input your note!' }] }]"
+            />
+          </a-form-item>
+          <a-form-item label="应用">
+            <a-select
+              show-search
+              v-decorator="['webapp.id', { rules: [{ required: true, message: 'Please input your note!' }] }]"
+              placeholder="input search text"
+              :default-active-first-option="false"
+              :show-arrow="false"
+              :filter-option="false"
+              :loading="domain.loading"
+              @search="searchWebapp"
+              @change="selectWebapp"
+            >
+              <a-select-option v-for="d in domain.searchData" :key="d.id">
+                {{ d.name }}
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="描述">
+            <a-input
+              v-decorator="['description', { rules: [{ message: 'Please input your note!' }] }]"
+            />
+          </a-form-item>
+          <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
+            <a-button type="primary" html-type="submit">Submit</a-button>
+          </a-form-item>
+        </a-form>
+      </a-modal>
+    </div>
   </page-header-wrapper>
 </template>
 
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { listRole, trimObject } from '@/api/entity'
+import { listRole, listWebapp, saveRole, trimObject, axios } from '@/api/entity'
 
+const CancelToken = axios.CancelToken
 const columns = [
   {
     title: 'ID',
@@ -99,8 +137,15 @@ export default {
   data () {
     this.columns = columns
     return {
-      // create model
-      visible: false,
+      domain: {
+        obj: {},
+        wait: null,
+        cancel: () => {},
+        searchData: [],
+        loading: false,
+        visible: false
+      },
+      editForm: this.$form.createForm(this),
       confirmLoading: false,
       mdl: null,
       // 高级搜索 展开/关闭
@@ -146,13 +191,75 @@ export default {
     }
   },
   methods: {
-    handleAdd () {
-      this.mdl = null
-      this.visible = true
+    selectWebapp (v, opt) {
+      this.domain.obj.webapp = { id: v }
+    },
+    searchWebapp (v) {
+      if (!v) return
+      this.domain.cancel('')
+      clearTimeout(this.domain.wait)
+      this.domain.loading = false
+      this.domain.wait = setTimeout(() => {
+        this.domain.loading = true
+        this.search(v).finally(() => { this.domain.loading = false })
+      }, 1000)
+    },
+    search (v) {
+      const param = {}
+      param.name = {
+        key: 'name',
+        val: '%' + v + '%',
+        opt: 'like'
+      }
+      const the = this
+      return listWebapp({ query: param }, {
+        cancelToken: new CancelToken(cancel => {
+          the.domain.cancel = cancel
+        })
+      }).then((res) => {
+        const data = []
+        res.content.forEach((e) => {
+          data.push(e)
+        })
+        this.domain.searchData = data
+      }).catch((e) => {})
     },
     handleEdit (record) {
-      this.visible = true
-      this.mdl = { ...record }
+      const cp = Object.assign({}, record)
+      this.domain.visible = true
+      this.domain.searchData = [ cp.webapp ]
+      this.$nextTick(() => {
+        this.domain.obj = cp
+        this.showEdit(cp)
+      })
+    },
+    showEdit (record) {
+      const rc = Object.assign({}, record, { webapp: { id: record.webapp.id, name: record.webapp.name } })
+      delete rc.id
+      delete rc.createTime
+      this.editForm.setFieldsValue(rc)
+    },
+    handleAdd () {
+      this.domain.visible = true
+      this.domain.obj = {}
+      this.domain.searchData = []
+      this.editForm.resetFields()
+    },
+    editSubmit (e) {
+      e.preventDefault()
+      this.editForm.validateFields((err, values) => {
+        if (!err) {
+          // console.log('Received values of form: ', values)
+          const entity = Object.assign({}, this.domain.obj, values)
+          saveRole(entity).then((res) => {
+            this.$refs.table.refresh()
+            this.domain.visible = false
+            this.$message.info('提交成功')
+          }).catch((e) => {
+            this.$message.error('出错了 : ' + e.response.data.message)
+          })
+        }
+      })
     },
     handleOk () {
       const form = this.$refs.createModal.form
