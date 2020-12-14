@@ -63,14 +63,14 @@
             />
           </a-form-item>
           <a-form-item label="应用">
-            <SelectWebapp
+            <a-select-webapp
               v-decorator="['webapp.id', { rules: [{ required: true, message: 'Please input your note!' }] }]"
               placeholder="input search text"
               @searched="searchedWebapp"
               @select="selectWebapp"
             >
               <a-select-option v-for="d in domain.webapps" :key="d.id">{{ d.name }}</a-select-option>
-            </SelectWebapp>
+            </a-select-webapp>
           </a-form-item>
           <a-form-item label="类型">
             <a-radio-group
@@ -90,14 +90,15 @@
             />
           </a-form-item>
           <a-form-item label="父菜单">
-            <SelectPermission
+            <a-select-permission
+              :allowClear="true"
               v-decorator="['parent.id', { rules: [{ required: false, message: 'Please input your note!' }] }]"
               placeholder="input search text"
               @searched="searchedPermission"
               @select="selectPermission"
             >
               <a-select-option v-for="d in domain.permissions" :key="d.id">{{ d.name }}</a-select-option>
-            </SelectPermission>
+            </a-select-permission>
           </a-form-item>
           <a-form-item label="描述">
             <a-input
@@ -165,8 +166,8 @@ export default {
   name: 'TableList',
   components: {
     STable,
-    SelectWebapp,
-    SelectPermission,
+    ASelectWebapp: SelectWebapp,
+    ASelectPermission: SelectPermission,
     Ellipsis
   },
   data () {
@@ -266,6 +267,12 @@ export default {
       this.editForm.validateFields((err, values) => {
         if (!err) {
           // console.log('Received values of form: ', values)
+          const p = this.domain.obj.parent
+          if (p.id) {
+            if (!values.parent.id) {
+              values.parent.id = 0
+            }
+          }
           const entity = Object.assign({}, this.domain.obj, values)
           savePermission(entity).then((res) => {
             this.$refs.table.refresh()
