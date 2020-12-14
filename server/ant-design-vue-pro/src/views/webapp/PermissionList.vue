@@ -66,10 +66,10 @@
             <SelectWebapp
               v-decorator="['webapp.id', { rules: [{ required: true, message: 'Please input your note!' }] }]"
               placeholder="input search text"
-              @searched="searched"
+              @searched="searchedWebapp"
               @select="selectWebapp"
             >
-              <a-select-option v-for="d in domain.searchData" :key="d.id">{{ d.name }}</a-select-option>
+              <a-select-option v-for="d in domain.webapps" :key="d.id">{{ d.name }}</a-select-option>
             </SelectWebapp>
           </a-form-item>
           <a-form-item label="类型">
@@ -90,13 +90,18 @@
             />
           </a-form-item>
           <a-form-item label="父菜单">
-            <a-input
-              v-decorator="['parent.id', { type: 'email', rules: [{ message: 'Please input your note!' }] }]"
-            />
+            <SelectPermission
+              v-decorator="['parent.id', { rules: [{ required: false, message: 'Please input your note!' }] }]"
+              placeholder="input search text"
+              @searched="searchedPermission"
+              @select="selectPermission"
+            >
+              <a-select-option v-for="d in domain.permissions" :key="d.id">{{ d.name }}</a-select-option>
+            </SelectPermission>
           </a-form-item>
           <a-form-item label="描述">
             <a-input
-              v-decorator="['description', { type: 'email', rules: [{ message: 'Please input your note!' }] }]"
+              v-decorator="['description', { rules: [{ message: 'Please input your note!' }] }]"
             />
           </a-form-item>
           <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
@@ -111,10 +116,10 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { listPermission, listWebapp, savePermission, trimObject, axios } from '@/api/entity'
+import { listPermission, savePermission, trimObject } from '@/api/entity'
 import SelectWebapp from '@/views/components/SelectWebapp'
+import SelectPermission from '@/views/components/SelectPermission'
 
-const CancelToken = axios.CancelToken
 const columns = [
   {
     title: 'ID',
@@ -161,6 +166,7 @@ export default {
   components: {
     STable,
     SelectWebapp,
+    SelectPermission,
     Ellipsis
   },
   data () {
@@ -168,10 +174,8 @@ export default {
     return {
       domain: {
         obj: {},
-        wait: null,
-        cancel: () => {},
-        searchData: [],
-        loading: false,
+        webapps: [],
+        permissions: [],
         visible: false
       },
       editForm: this.$form.createForm(this),
@@ -223,43 +227,20 @@ export default {
     selectWebapp (v, opt) {
       this.domain.obj.webapp = { id: v }
     },
-    searched (data) {
-      this.domain.searchData = data
+    selectPermission (v, opt) {
+      this.domain.obj.parent = { id: v }
     },
-    searchWebapp (v) {
-      if (!v) return
-      this.domain.cancel('')
-      clearTimeout(this.domain.wait)
-      this.domain.loading = false
-      this.domain.wait = setTimeout(() => {
-        this.domain.loading = true
-        this.search(v).finally(() => { this.domain.loading = false })
-      }, 1000)
+    searchedWebapp (data) {
+      this.domain.webapps = data
     },
-    search (v) {
-      const param = {}
-      param.name = {
-        key: 'name',
-        val: '%' + v + '%',
-        opt: 'like'
-      }
-      const the = this
-      return listWebapp({ query: param }, {
-        cancelToken: new CancelToken(cancel => {
-          the.domain.cancel = cancel
-        })
-      }).then((res) => {
-        const data = []
-        res.content.forEach((e) => {
-          data.push(e)
-        })
-        this.domain.searchData = data
-      }).catch((e) => {})
+    searchedPermission (data) {
+      this.domain.permissions = data
     },
     handleEdit (record) {
       const cp = Object.assign({}, record)
       this.domain.visible = true
-      this.domain.searchData = [ cp.webapp ]
+      this.domain.webapps = [ cp.webapp ]
+      this.domain.permissions = cp.parent ? [ cp.parent ] : []
       this.$nextTick(() => {
         this.domain.obj = cp
         this.showEdit(cp)
@@ -275,7 +256,8 @@ export default {
     handleAdd () {
       this.domain.visible = true
       this.domain.obj = {}
-      this.domain.searchData = []
+      this.domain.webapps = []
+      this.domain.permissions = []
       this.editForm.resetFields()
     },
     editSubmit (e) {
