@@ -241,6 +241,7 @@ export default {
       this.domain.visible = true
       this.domain.webapps = [ cp.webapp ]
       this.domain.permissions = cp.parent ? [ cp.parent ] : []
+      this.editForm.resetFields()
       this.$nextTick(() => {
         this.domain.obj = cp
         this.showEdit(cp)
