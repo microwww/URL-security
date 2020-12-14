@@ -63,21 +63,14 @@
             />
           </a-form-item>
           <a-form-item label="应用">
-            <a-select
-              show-search
+            <SelectWebapp
               v-decorator="['webapp.id', { rules: [{ required: true, message: 'Please input your note!' }] }]"
               placeholder="input search text"
-              :default-active-first-option="false"
-              :show-arrow="false"
-              :filter-option="false"
-              :loading="domain.loading"
-              @search="searchWebapp"
-              @change="selectWebapp"
+              @searched="searched"
+              @select="selectWebapp"
             >
-              <a-select-option v-for="d in domain.searchData" :key="d.id">
-                {{ d.name }}
-              </a-select-option>
-            </a-select>
+            <a-select-option v-for="d in domain.searchData" :key="d.id">{{ d.name }}</a-select-option>
+            </SelectWebapp>
           </a-form-item>
           <a-form-item label="描述">
             <a-input
@@ -96,9 +89,9 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { listRole, listWebapp, saveRole, trimObject, axios } from '@/api/entity'
+import { listRole, saveRole, trimObject } from '@/api/entity'
+import SelectWebapp from '@/views/components/SelectWebapp'
 
-const CancelToken = axios.CancelToken
 const columns = [
   {
     title: 'ID',
@@ -131,6 +124,7 @@ const columns = [
 export default {
   name: 'TableList',
   components: {
+    SelectWebapp,
     STable,
     Ellipsis
   },
@@ -194,35 +188,8 @@ export default {
     selectWebapp (v, opt) {
       this.domain.obj.webapp = { id: v }
     },
-    searchWebapp (v) {
-      if (!v) return
-      this.domain.cancel('')
-      clearTimeout(this.domain.wait)
-      this.domain.loading = false
-      this.domain.wait = setTimeout(() => {
-        this.domain.loading = true
-        this.search(v).finally(() => { this.domain.loading = false })
-      }, 1000)
-    },
-    search (v) {
-      const param = {}
-      param.name = {
-        key: 'name',
-        val: '%' + v + '%',
-        opt: 'like'
-      }
-      const the = this
-      return listWebapp({ query: param }, {
-        cancelToken: new CancelToken(cancel => {
-          the.domain.cancel = cancel
-        })
-      }).then((res) => {
-        const data = []
-        res.content.forEach((e) => {
-          data.push(e)
-        })
-        this.domain.searchData = data
-      }).catch((e) => {})
+    searched (data) {
+      this.domain.searchData = data
     },
     handleEdit (record) {
       const cp = Object.assign({}, record)

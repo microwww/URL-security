@@ -63,21 +63,14 @@
             />
           </a-form-item>
           <a-form-item label="应用">
-            <a-select
-              show-search
+            <SelectWebapp
               v-decorator="['webapp.id', { rules: [{ required: true, message: 'Please input your note!' }] }]"
               placeholder="input search text"
-              :default-active-first-option="false"
-              :show-arrow="false"
-              :filter-option="false"
-              :loading="domain.loading"
-              @search="searchWebapp"
-              @change="selectWebapp"
+              @searched="searched"
+              @select="selectWebapp"
             >
-              <a-select-option v-for="d in domain.searchData" :key="d.id">
-                {{ d.name }}
-              </a-select-option>
-            </a-select>
+              <a-select-option v-for="d in domain.searchData" :key="d.id">{{ d.name }}</a-select-option>
+            </SelectWebapp>
           </a-form-item>
           <a-form-item label="类型">
             <a-radio-group
@@ -119,6 +112,7 @@
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import { listPermission, listWebapp, savePermission, trimObject, axios } from '@/api/entity'
+import SelectWebapp from '@/views/components/SelectWebapp'
 
 const CancelToken = axios.CancelToken
 const columns = [
@@ -166,6 +160,7 @@ export default {
   name: 'TableList',
   components: {
     STable,
+    SelectWebapp,
     Ellipsis
   },
   data () {
@@ -227,6 +222,9 @@ export default {
   methods: {
     selectWebapp (v, opt) {
       this.domain.obj.webapp = { id: v }
+    },
+    searched (data) {
+      this.domain.searchData = data
     },
     searchWebapp (v) {
       if (!v) return
