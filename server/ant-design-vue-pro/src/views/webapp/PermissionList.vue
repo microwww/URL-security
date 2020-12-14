@@ -268,8 +268,8 @@ export default {
         if (!err) {
           // console.log('Received values of form: ', values)
           const p = this.domain.obj.parent
-          if (p.id) {
-            if (!values.parent.id) {
+          if (p && p.id) {
+            if (!values.parent || !values.parent.id) {
               values.parent.id = 0
             }
           }
