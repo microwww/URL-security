@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * @author changshu.li
  */
-public class AuthorityServiceImp implements AccountAuthorityService {
+public class PermissionServiceImp implements AccountPermissionService {
 
     private static ObjectMapper mapper = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -21,7 +21,7 @@ public class AuthorityServiceImp implements AccountAuthorityService {
     private final String appSecurity;
     private final String host;
 
-    public AuthorityServiceImp(String host, String appId, String appSecurity) {
+    public PermissionServiceImp(String host, String appId, String appSecurity) {
         this.host = host;
         this.appId = appId;
         this.appSecurity = appSecurity;

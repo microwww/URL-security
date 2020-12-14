@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * @author changshu.li
  */
-public interface AccountAuthorityService {
+public interface AccountPermissionService {
 
     Token author(String appId, String appSecurity) throws NoRightException;
 

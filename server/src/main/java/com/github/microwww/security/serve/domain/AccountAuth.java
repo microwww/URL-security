@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "account_auth")
-public class AuthAccount extends AbstractBasicEntity {
+public class AccountAuth extends AbstractBasicEntity {
     private static final long serialVersionUID = 1L;
 
     public enum Type {
@@ -20,7 +20,7 @@ public class AuthAccount extends AbstractBasicEntity {
 
     private String key;
 
-    public AuthAccount() {
+    public AccountAuth() {
     }
 
     public Account getAccount() {

@@ -9,7 +9,7 @@ import com.github.microwww.security.cli.dto.App;
 import com.github.microwww.security.cli.dto.Permission;
 import com.github.microwww.security.cli.dto.Token;
 import com.github.microwww.security.cli.help.Rconfig;
-import com.github.microwww.security.cli.imp.AuthorityServiceImp;
+import com.github.microwww.security.cli.imp.PermissionServiceImp;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  */
 public class RurlServiceWrapTest {
 
-    AccountAuthorityService instance = new AuthorityServiceImp("https://www.baidu.com/api", "simple", "security");
+    AccountPermissionService instance = new PermissionServiceImp("https://www.baidu.com/api", "simple", "security");
 
     @Test
     public void testListUrlRight() {

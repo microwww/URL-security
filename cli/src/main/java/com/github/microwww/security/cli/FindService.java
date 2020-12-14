@@ -4,7 +4,7 @@ import com.github.microwww.security.cli.cache.CommonCache;
 import com.github.microwww.security.cli.cache.WeakCache;
 import com.github.microwww.security.cli.help.Rconfig;
 import com.github.microwww.security.cli.imp.HttpClientImpl;
-import com.github.microwww.security.cli.imp.AuthorityServiceImp;
+import com.github.microwww.security.cli.imp.PermissionServiceImp;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -26,10 +26,10 @@ public class FindService {
         return find.load(HttpClient.class, () -> new HttpClientImpl());
     }
 
-    public static AccountAuthorityService loadAuthorityService() {
-        return find.load(AccountAuthorityService.class, () -> {
+    public static AccountPermissionService loadAuthorityService() {
+        return find.load(AccountPermissionService.class, () -> {
             String server = Rconfig.getServerHost();
-            return new AuthorityServiceImp(server, Rconfig.getAppId(), Rconfig.getAppSecurity());
+            return new PermissionServiceImp(server, Rconfig.getAppId(), Rconfig.getAppSecurity());
         });
     }
 

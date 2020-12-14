@@ -72,8 +72,8 @@ public class Webapp extends AbstractBasicEntity {
         return permissions;
     }
 
-    public void setPermissions(List<Permission> authoritys) {
-        this.permissions = authoritys;
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     public String getDescription() {

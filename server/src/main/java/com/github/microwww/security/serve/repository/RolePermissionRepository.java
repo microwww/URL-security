@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import java.util.Optional;
 
-public interface RoleAuthorityRepository extends JpaRepository<RolePermission, Integer> {
+public interface RolePermissionRepository extends JpaRepository<RolePermission, Integer> {
 
     public Page<RolePermission> findAll(Pageable page);
 

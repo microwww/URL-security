@@ -3,7 +3,7 @@ package com.github.microwww.security.serve.service;
 import com.github.microwww.security.serve.domain.Role;
 import com.github.microwww.security.serve.domain.RolePermission;
 import com.github.microwww.security.serve.exception.ExistException;
-import com.github.microwww.security.serve.repository.RoleAuthorityRepository;
+import com.github.microwww.security.serve.repository.RolePermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,34 +14,26 @@ import java.util.Optional;
 
 @Service()
 @Transactional()
-public class RoleAuthorityService {
+public class RolePermissionService {
 
     @Autowired()
-    private RoleAuthorityRepository roleAuthorityRepository;
-
-    public RoleAuthorityRepository getRoleAuthorityRepository() {
-        return roleAuthorityRepository;
-    }
-
-    public void setRoleAuthorityRepository(RoleAuthorityRepository roleAuthorityRepository) {
-        this.roleAuthorityRepository = roleAuthorityRepository;
-    }
+    private RolePermissionRepository rolePermissionRepository;
 
     public Page<RolePermission> findAll(int page, int size) {
-        return this.roleAuthorityRepository.findAll(PageRequest.of(page, size));
+        return this.rolePermissionRepository.findAll(PageRequest.of(page, size));
     }
 
     public Optional<RolePermission> findById(int id) {
-        return this.roleAuthorityRepository.findById(id);
+        return this.rolePermissionRepository.findById(id);
     }
 
     public RolePermission getOrElseThrow(int id) {
-        return this.roleAuthorityRepository.findById(id).orElseThrow(() -> {
+        return this.rolePermissionRepository.findById(id).orElseThrow(() -> {
             return new ExistException.NotExist(RolePermission.class);
         });
     }
 
     public Page<RolePermission> findByRole(Role role, int page, int size) {
-        return roleAuthorityRepository.findByRole(role, PageRequest.of(page, size));
+        return rolePermissionRepository.findByRole(role, PageRequest.of(page, size));
     }
 }

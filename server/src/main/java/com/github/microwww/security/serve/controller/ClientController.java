@@ -7,9 +7,9 @@ import com.github.microwww.security.serve.domain.*;
 import com.github.microwww.security.serve.exception.ExistException;
 import com.github.microwww.security.serve.exception.HttpRequestException;
 import com.github.microwww.security.serve.service.AccountService;
-import com.github.microwww.security.serve.service.AuthorityService;
+import com.github.microwww.security.serve.service.PermissionService;
 import com.github.microwww.security.serve.service.RoleAccountService;
-import com.github.microwww.security.serve.service.RoleAuthorityService;
+import com.github.microwww.security.serve.service.RolePermissionService;
 import com.github.microwww.security.serve.vo.AccountValue;
 import com.github.microwww.security.serve.vo.PermissionValue;
 import com.github.microwww.security.serve.vo.WebappValue;
@@ -33,13 +33,13 @@ public class ClientController extends WebappAuthorController {
     public static int OVER_TIME_SECONDS = 10 * 24 * 60 * 60; // 10 DAY
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     @Autowired
-    RoleAuthorityService roleAuthorityService;
+    RolePermissionService roleAuthorityService;
     @Autowired
     RoleAccountService roleAccountService;
     @Autowired
     AccountService accountService;
     @Autowired
-    AuthorityService authorityService;
+    PermissionService authorityService;
     @Autowired
     ApiAuthenticationService apiAuthenticationService;
 
@@ -62,7 +62,7 @@ public class ClientController extends WebappAuthorController {
     @PostMapping("/login")
     public AccountValue.Simple login(@RequestParam String account, @RequestParam String password) {
         Account acc = accountService.findByAccount(account).orElseThrow(() -> new ExistException.NotExist(Account.class));
-        AuthAccount auth = accountService.findAuthAccount(acc).orElseThrow(() -> new ExistException.NotExist(AuthAccount.class));
+        AccountAuth auth = accountService.findAuthAccount(acc).orElseThrow(() -> new ExistException.NotExist(AccountAuth.class));
         if (encoder.matches(password, auth.getKey())) {
             return new AccountValue.Simple(acc);
         }
