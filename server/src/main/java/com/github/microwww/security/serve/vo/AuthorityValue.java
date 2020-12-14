@@ -83,7 +83,7 @@ public abstract class AuthorityValue {
         private Authority.Type type;
         private int sort;
         private String description;
-        private AuthorityValue.Form authority;
+        private AuthorityValue.Form parent;
         private WebappValue.Form webapp;
 
         public String getName() {
@@ -126,12 +126,12 @@ public abstract class AuthorityValue {
             this.description = description;
         }
 
-        public Form getAuthority() {
-            return authority;
+        public Form getParent() {
+            return parent;
         }
 
-        public void setAuthority(Form authority) {
-            this.authority = authority;
+        public void setParent(Form parent) {
+            this.parent = parent;
         }
 
         public WebappValue.Form getWebapp() {
