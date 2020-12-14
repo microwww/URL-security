@@ -7,10 +7,10 @@ import java.lang.reflect.InvocationTargetException;
 
 public enum EntityEnum {
     Account,
-    Authority,
+    Permission,
     Role,
     RoleAccount,
-    RoleAuthority,
+    RolePermission,
     Webapp;
 
     private static final String PREFIX = com.github.microwww.security.serve.domain.Webapp.class.getPackage().getName();

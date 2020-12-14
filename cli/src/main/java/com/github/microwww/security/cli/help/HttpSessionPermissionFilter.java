@@ -10,7 +10,7 @@ import com.github.microwww.security.cli.dto.Account;
  *
  * @author changshu.li
  */
-public class HttpSessionRightFilter extends AbstractAntPathRightFilter {
+public class HttpSessionPermissionFilter extends AbstractAntPathPermissionFilter {
 
     /**
      * session 中缓存用户的KEY

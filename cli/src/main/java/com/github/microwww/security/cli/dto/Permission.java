@@ -7,7 +7,7 @@ import java.io.Serializable;
  *
  * @author changshu.li
  */
-public class Authority implements Serializable {
+public class Permission implements Serializable {
 
     public enum Type {
         URL, MENU;

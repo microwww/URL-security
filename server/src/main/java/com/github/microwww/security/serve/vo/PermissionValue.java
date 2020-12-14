@@ -1,18 +1,18 @@
 package com.github.microwww.security.serve.vo;
 
-import com.github.microwww.security.serve.domain.Authority;
-import com.github.microwww.security.serve.domain.RoleAuthority;
+import com.github.microwww.security.serve.domain.Permission;
+import com.github.microwww.security.serve.domain.RolePermission;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public abstract class AuthorityValue {
+public abstract class PermissionValue {
 
-    public static class Simple extends AbstractDomainValue<Authority> {
+    public static class Simple extends AbstractDomainValue<Permission> {
 
-        public Simple(Authority domain) {
+        public Simple(Permission domain) {
             super(domain);
         }
 
@@ -47,12 +47,12 @@ public abstract class AuthorityValue {
 
     public static class Info extends Simple {
 
-        public Info(Authority domain) {
+        public Info(Permission domain) {
             super(domain);
         }
 
-        public AuthorityValue.Simple getParent() {
-            return Optional.ofNullable(super.domain.getParent()).map(AuthorityValue.Simple::new).orElse(null);
+        public PermissionValue.Simple getParent() {
+            return Optional.ofNullable(super.domain.getParent()).map(PermissionValue.Simple::new).orElse(null);
         }
 
         public WebappValue.Simple getWebapp() {
@@ -62,28 +62,28 @@ public abstract class AuthorityValue {
 
     public static class More extends Info {
 
-        public More(Authority domain) {
+        public More(Permission domain) {
             super(domain);
         }
 
-        public List<AuthorityValue.Simple> getAuthoritys() {
-            List<Authority> list = super.domain.getAuthoritys();
-            return list.stream().map(AuthorityValue.Simple::new).collect(Collectors.toList());
+        public List<PermissionValue.Simple> getPermissions() {
+            List<Permission> list = super.domain.getPermissions();
+            return list.stream().map(PermissionValue.Simple::new).collect(Collectors.toList());
         }
 
-        public List<RoleAuthorityValue.Simple> getRoleAuthoritys() {
-            List<RoleAuthority> list = super.domain.getRoleAuthoritys();
-            return list.stream().map(RoleAuthorityValue.Simple::new).collect(Collectors.toList());
+        public List<RolePermissionValue.Simple> getRolePermissions() {
+            List<RolePermission> list = super.domain.getRolePermissions();
+            return list.stream().map(RolePermissionValue.Simple::new).collect(Collectors.toList());
         }
     }
 
     public static class Form extends ID {
         private String name;
         private String uri;
-        private Authority.Type type;
+        private Permission.Type type;
         private int sort;
         private String description;
-        private AuthorityValue.Form parent;
+        private PermissionValue.Form parent;
         private WebappValue.Form webapp;
 
         public String getName() {
@@ -102,11 +102,11 @@ public abstract class AuthorityValue {
             this.uri = uri;
         }
 
-        public Authority.Type getType() {
+        public Permission.Type getType() {
             return type;
         }
 
-        public void setType(Authority.Type type) {
+        public void setType(Permission.Type type) {
             this.type = type;
         }
 

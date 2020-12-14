@@ -76,14 +76,14 @@ public class AuthorityServiceImp implements AccountAuthorityService {
     }
 
     @Override
-    public List<Authority> listAuthorityByAccount(String account) {
+    public List<Permission> listPermissionByAccount(String account) {
         try {
             String token = author().getToken();
             String login = FindService.loadHttpClient().getWithHeader(
-                    host + "/account/authority",
+                    host + "/account/permission",
                     Collections.singletonMap("token", token),
                     "account", account);
-            Authority[] r = mapper.readValue(login, Authority[].class);
+            Permission[] r = mapper.readValue(login, Permission[].class);
             return Arrays.asList(r);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -91,14 +91,14 @@ public class AuthorityServiceImp implements AccountAuthorityService {
     }
 
     @Override
-    public List<Authority> listAuthorityByApp() {
+    public List<Permission> listPermissionByApp() {
         try {
             String token = author().getToken();
             String login = FindService.loadHttpClient().getWithHeader(
-                    host + "/app/authority",
+                    host + "/app/permission",
                     Collections.singletonMap("token", token),
                     "appId", appId);
-            Authority[] r = mapper.readValue(login, Authority[].class);
+            Permission[] r = mapper.readValue(login, Permission[].class);
             return Arrays.asList(r);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -106,20 +106,20 @@ public class AuthorityServiceImp implements AccountAuthorityService {
     }
 
     @Override
-    public List<Authority> listMenu(String account) {
-        List<Authority> result = new ArrayList();
-        List<Authority> list = this.listAuthorityByAccount(account);
-        for (Authority url : list) {
-            if (Authority.Type.MENU.name().equals(url.getType())) {
+    public List<Permission> listMenu(String account) {
+        List<Permission> result = new ArrayList();
+        List<Permission> list = this.listPermissionByAccount(account);
+        for (Permission url : list) {
+            if (Permission.Type.MENU.name().equals(url.getType())) {
                 result.add(url);
             }
         }
-        Collections.sort(result, Comparator.comparingInt(Authority::getSort));
+        Collections.sort(result, Comparator.comparingInt(Permission::getSort));
         return result;
     }
 
     @Override
-    public List<Authority> saveAuthorityUrl(Set<String> set) {
+    public List<Permission> savePermissionUrl(Set<String> set) {
         try {
             String[] ss = new String[set.size()];
             int i = 0;
@@ -132,7 +132,7 @@ public class AuthorityServiceImp implements AccountAuthorityService {
                     host + "/authority/save.url",
                     Collections.singletonMap("token", token),
                     ss);
-            Authority[] r = mapper.readValue(login, Authority[].class);
+            Permission[] r = mapper.readValue(login, Permission[].class);
             return Arrays.asList(r);
         } catch (IOException e) {
             throw new RuntimeException(e);

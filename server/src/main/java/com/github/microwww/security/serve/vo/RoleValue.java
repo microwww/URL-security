@@ -52,9 +52,9 @@ public abstract class RoleValue {
             return list.stream().map(RoleAccountValue.Simple::new).collect(Collectors.toList());
         }
 
-        public List<RoleAuthorityValue.Simple> getRoleAuthoritys() {
-            List<RoleAuthority> list = super.domain.getRoleAuthoritys();
-            return list.stream().map(RoleAuthorityValue.Simple::new).collect(Collectors.toList());
+        public List<RolePermissionValue.Simple> getRolePermissions() {
+            List<RolePermission> list = super.domain.getRolePermissions();
+            return list.stream().map(RolePermissionValue.Simple::new).collect(Collectors.toList());
         }
 
     }

@@ -1,6 +1,6 @@
 package com.github.microwww.security.serve.service;
 
-import com.github.microwww.security.serve.domain.Authority;
+import com.github.microwww.security.serve.domain.Permission;
 import com.github.microwww.security.serve.domain.Webapp;
 import com.github.microwww.security.serve.exception.ExistException;
 import com.github.microwww.security.serve.repository.AuthorityRepository;
@@ -29,30 +29,30 @@ public class AuthorityService {
         this.authorityRepository = authorityRepository;
     }
 
-    public Page<Authority> findAll(int page, int size) {
+    public Page<Permission> findAll(int page, int size) {
         return this.authorityRepository.findAll(PageRequest.of(page, size));
     }
 
-    public Optional<Authority> findById(int id) {
+    public Optional<Permission> findById(int id) {
         return this.authorityRepository.findById(id);
     }
 
-    public Authority getOrElseThrow(int id) {
+    public Permission getOrElseThrow(int id) {
         return this.authorityRepository.findById(id).orElseThrow(() -> {
-            return new ExistException.NotExist(Authority.class);
+            return new ExistException.NotExist(Permission.class);
         });
     }
 
-    public Page<Authority> findByWebapp(Webapp webapp, int page, int size) {
+    public Page<Permission> findByWebapp(Webapp webapp, int page, int size) {
         return authorityRepository.findByWebapp(webapp, PageRequest.of(page, size));
     }
 
-    public List<Authority> save(Webapp webapp, String... url) {
-        List<Authority> list = new ArrayList<>();
+    public List<Permission> save(Webapp webapp, String... url) {
+        List<Permission> list = new ArrayList<>();
         for (String u : url) {
-            Authority au = authorityRepository.findByWebappAndUri(webapp, u);
+            Permission au = authorityRepository.findByWebappAndUri(webapp, u);
             if (au == null) {
-                au = new Authority();
+                au = new Permission();
                 au.setWebapp(webapp);
                 au.setUri(u);
                 authorityRepository.save(au);

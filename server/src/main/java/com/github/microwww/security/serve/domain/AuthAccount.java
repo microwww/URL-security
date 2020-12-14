@@ -3,7 +3,7 @@ package com.github.microwww.security.serve.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "permission_account")
+@Table(name = "account_auth")
 public class AuthAccount extends AbstractBasicEntity {
     private static final long serialVersionUID = 1L;
 

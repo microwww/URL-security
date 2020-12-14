@@ -1,9 +1,7 @@
 package com.github.microwww.security.serve.service;
 
 import com.github.microwww.security.serve.domain.Role;
-import com.github.microwww.security.serve.domain.RoleAccount;
-import com.github.microwww.security.serve.domain.RoleAuthority;
-import com.github.microwww.security.serve.domain.Webapp;
+import com.github.microwww.security.serve.domain.RolePermission;
 import com.github.microwww.security.serve.exception.ExistException;
 import com.github.microwww.security.serve.repository.RoleAuthorityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,21 +27,21 @@ public class RoleAuthorityService {
         this.roleAuthorityRepository = roleAuthorityRepository;
     }
 
-    public Page<RoleAuthority> findAll(int page, int size) {
+    public Page<RolePermission> findAll(int page, int size) {
         return this.roleAuthorityRepository.findAll(PageRequest.of(page, size));
     }
 
-    public Optional<RoleAuthority> findById(int id) {
+    public Optional<RolePermission> findById(int id) {
         return this.roleAuthorityRepository.findById(id);
     }
 
-    public RoleAuthority getOrElseThrow(int id) {
+    public RolePermission getOrElseThrow(int id) {
         return this.roleAuthorityRepository.findById(id).orElseThrow(() -> {
-            return new ExistException.NotExist(RoleAuthority.class);
+            return new ExistException.NotExist(RolePermission.class);
         });
     }
 
-    public Page<RoleAuthority> findByRole(Role role, int page, int size) {
+    public Page<RolePermission> findByRole(Role role, int page, int size) {
         return roleAuthorityRepository.findByRole(role, PageRequest.of(page, size));
     }
 }

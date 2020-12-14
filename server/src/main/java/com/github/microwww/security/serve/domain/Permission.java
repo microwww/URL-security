@@ -9,7 +9,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "permission")
-public class Authority extends AbstractBasicEntity {
+public class Permission extends AbstractBasicEntity {
 
     public enum Type {
         URL, MENU;
@@ -36,35 +36,35 @@ public class Authority extends AbstractBasicEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "parent_id", columnDefinition = "INT")
-    private Authority parent;
+    private Permission parent;
 
-    @OneToMany(targetEntity = Authority.class, mappedBy = "parent", cascade = CascadeType.MERGE)
-    private List<Authority> authoritys;
+    @OneToMany(targetEntity = Permission.class, mappedBy = "parent", cascade = CascadeType.MERGE)
+    private List<Permission> permissions;
 
-    @OneToMany(targetEntity = RoleAuthority.class, mappedBy = "authority", cascade = CascadeType.MERGE)
-    private List<RoleAuthority> roleAuthoritys;
+    @OneToMany(targetEntity = RolePermission.class, mappedBy = "permission", cascade = CascadeType.MERGE)
+    private List<RolePermission> rolePermissions;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "webapp_id", columnDefinition = "INT", nullable = false)
     private Webapp webapp;
 
-    public Authority() {
+    public Permission() {
     }
 
-    public Authority getParent() {
+    public Permission getParent() {
         return parent;
     }
 
-    public void setParent(Authority authority) {
+    public void setParent(Permission authority) {
         this.parent = authority;
     }
 
-    public List<Authority> getAuthoritys() {
-        return authoritys;
+    public List<Permission> getPermissions() {
+        return permissions;
     }
 
-    public void setAuthoritys(List<Authority> authoritys) {
-        this.authoritys = authoritys;
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     public String getDescription() {
@@ -83,12 +83,12 @@ public class Authority extends AbstractBasicEntity {
         this.name = name;
     }
 
-    public List<RoleAuthority> getRoleAuthoritys() {
-        return roleAuthoritys;
+    public List<RolePermission> getRolePermissions() {
+        return rolePermissions;
     }
 
-    public void setRoleAuthoritys(List<RoleAuthority> roleAuthoritys) {
-        this.roleAuthoritys = roleAuthoritys;
+    public void setRolePermissions(List<RolePermission> rolePermissions) {
+        this.rolePermissions = rolePermissions;
     }
 
     public int getSort() {

@@ -1,6 +1,5 @@
 package com.github.microwww.security.serve.domain;
 
-import java.io.Serializable;
 import java.util.*;
 import javax.persistence.*;
 
@@ -35,8 +34,8 @@ public class Webapp extends AbstractBasicEntity {
     @Basic
     private String description;
 
-    @OneToMany(targetEntity = Authority.class, mappedBy = "webapp", cascade = CascadeType.MERGE)
-    private List<Authority> authoritys;
+    @OneToMany(targetEntity = Permission.class, mappedBy = "webapp", cascade = CascadeType.MERGE)
+    private List<Permission> permissions;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "role_id", columnDefinition = "INT")
@@ -69,12 +68,12 @@ public class Webapp extends AbstractBasicEntity {
         this.appSecurity = appSecurity;
     }
 
-    public List<Authority> getAuthoritys() {
-        return authoritys;
+    public List<Permission> getPermissions() {
+        return permissions;
     }
 
-    public void setAuthoritys(List<Authority> authoritys) {
-        this.authoritys = authoritys;
+    public void setPermissions(List<Permission> authoritys) {
+        this.permissions = authoritys;
     }
 
     public String getDescription() {

@@ -25,8 +25,8 @@ public class Role extends AbstractBasicEntity {
     @OneToMany(targetEntity = RoleAccount.class, mappedBy = "role", cascade = CascadeType.MERGE)
     private List<RoleAccount> roleAccounts;
 
-    @OneToMany(targetEntity = RoleAuthority.class, mappedBy = "role", cascade = CascadeType.MERGE)
-    private List<RoleAuthority> roleAuthoritys;
+    @OneToMany(targetEntity = RolePermission.class, mappedBy = "role", cascade = CascadeType.MERGE)
+    private List<RolePermission> rolePermissions;
 
     public Role() {
     }
@@ -55,12 +55,12 @@ public class Role extends AbstractBasicEntity {
         this.roleAccounts = roleAccounts;
     }
 
-    public List<RoleAuthority> getRoleAuthoritys() {
-        return roleAuthoritys;
+    public List<RolePermission> getRolePermissions() {
+        return rolePermissions;
     }
 
-    public void setRoleAuthoritys(List<RoleAuthority> roleAuthoritys) {
-        this.roleAuthoritys = roleAuthoritys;
+    public void setRolePermissions(List<RolePermission> roleAuthoritys) {
+        this.rolePermissions = roleAuthoritys;
     }
 
     public Webapp getWebapp() {

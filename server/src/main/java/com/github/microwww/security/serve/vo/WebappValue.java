@@ -74,9 +74,9 @@ public class WebappValue {
             super(domain);
         }
 
-        public List<AuthorityValue.Simple> getAuthoritys() {
-            List<Authority> list = super.domain.getAuthoritys();
-            return list.stream().map(AuthorityValue.Simple::new).collect(Collectors.toList());
+        public List<PermissionValue.Simple> getPermissions() {
+            List<Permission> list = super.domain.getPermissions();
+            return list.stream().map(PermissionValue.Simple::new).collect(Collectors.toList());
         }
     }
 

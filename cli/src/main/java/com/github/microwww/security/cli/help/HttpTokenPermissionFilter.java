@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author changshu.li
  */
-public class HttpTokenRightFilter extends AbstractAntPathRightFilter {
+public class HttpTokenPermissionFilter extends AbstractAntPathPermissionFilter {
 
     private TokenStore tokenStore = TokenStore.HEADER;
     private String tokenName = "token";

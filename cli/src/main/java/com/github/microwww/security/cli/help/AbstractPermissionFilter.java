@@ -1,7 +1,7 @@
 package com.github.microwww.security.cli.help;
 
 import com.github.microwww.security.cli.dto.Account;
-import com.github.microwww.security.cli.dto.Authority;
+import com.github.microwww.security.cli.dto.Permission;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class AbstractRightFilter implements Filter {
+public abstract class AbstractPermissionFilter implements Filter {
     protected FilterConfig filterConfig;
     protected final AntPath antPath = new AntPath();
     // private List<String> antPaths = new CopyOnWriteArrayList<>();
@@ -42,8 +42,8 @@ public abstract class AbstractRightFilter implements Filter {
             return;
         }
 
-        List<Authority> right = this.getAccountUrls(login);
-        for (Authority mt : right) {
+        List<Permission> right = this.getAccountUrls(login);
+        for (Permission mt : right) {
             String matcher = mt.getUri();
             boolean match = antPath.match(matcher, path); // TODO :: cache
             if (match) {
@@ -69,7 +69,7 @@ public abstract class AbstractRightFilter implements Filter {
 
     protected abstract boolean anonymous(HttpServletRequest request, String path);
 
-    protected abstract List<Authority> getAccountUrls(Account employee);
+    protected abstract List<Permission> getAccountUrls(Account employee);
 
     protected abstract Account getLogin(HttpServletRequest request);
 }

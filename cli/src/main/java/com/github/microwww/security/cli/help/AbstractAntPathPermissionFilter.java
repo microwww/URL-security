@@ -2,14 +2,14 @@ package com.github.microwww.security.cli.help;
 
 import com.github.microwww.security.cli.FindService;
 import com.github.microwww.security.cli.dto.Account;
-import com.github.microwww.security.cli.dto.Authority;
+import com.github.microwww.security.cli.dto.Permission;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-public class AbstractAntPathRightFilter extends AbstractRightFilter {
+public class AbstractAntPathPermissionFilter extends AbstractPermissionFilter {
 
     private String[] skipURL = {};
 
@@ -32,8 +32,8 @@ public class AbstractAntPathRightFilter extends AbstractRightFilter {
     }
 
     @Override
-    protected List<Authority> getAccountUrls(Account employee) {
-        return FindService.loadAuthorityService().listAuthorityByAccount(employee.getAccount());
+    protected List<Permission> getAccountUrls(Account employee) {
+        return FindService.loadAuthorityService().listPermissionByAccount(employee.getAccount());
     }
 
     @Override

@@ -11,7 +11,7 @@ import com.github.microwww.security.serve.service.AuthorityService;
 import com.github.microwww.security.serve.service.RoleAccountService;
 import com.github.microwww.security.serve.service.RoleAuthorityService;
 import com.github.microwww.security.serve.vo.AccountValue;
-import com.github.microwww.security.serve.vo.AuthorityValue;
+import com.github.microwww.security.serve.vo.PermissionValue;
 import com.github.microwww.security.serve.vo.WebappValue;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,32 +76,32 @@ public class ClientController extends WebappAuthorController {
     }
 
     @ApiOperation("用户的权限列表")
-    @GetMapping("/account/authority")
-    public List<AuthorityValue.Simple> authorityByAccount(@RequestParam String account) {
+    @GetMapping("/account/permission")
+    public List<PermissionValue.Simple> authorityByAccount(@RequestParam String account) {
         Webapp login = this.getLogin();
         Account acc = accountService.findByAccount(account).orElseThrow(() -> new ExistException.NotExist(Account.class));
         Page<RoleAccount> rol = roleAccountService.findByAccount(login, acc, 0, 100);
-        List<RoleAuthority> values = new ArrayList<>();
+        List<RolePermission> values = new ArrayList<>();
         for (RoleAccount ra : rol.getContent()) {
-            Page<RoleAuthority> rl = roleAuthorityService.findByRole(ra.getRole(), 0, 1000);
+            Page<RolePermission> rl = roleAuthorityService.findByRole(ra.getRole(), 0, 1000);
             values.addAll(rl.getContent());
         }
-        return values.stream().map(RoleAuthority::getAuthority).map(AuthorityValue.Simple::new).collect(Collectors.toList());
+        return values.stream().map(RolePermission::getPermission).map(PermissionValue.Simple::new).collect(Collectors.toList());
     }
 
     @ApiOperation("APP的权限列表")
-    @GetMapping("/app/authority")
-    public List<AuthorityValue.Simple> authorityByWebapp() {
+    @GetMapping("/app/permission")
+    public List<PermissionValue.Simple> authorityByWebapp() {
         Webapp login = this.getLogin();
-        Page<Authority> rol = authorityService.findByWebapp(login, 0, 100);
-        return rol.stream().map(AuthorityValue.Simple::new).collect(Collectors.toList());
+        Page<Permission> rol = authorityService.findByWebapp(login, 0, 100);
+        return rol.stream().map(PermissionValue.Simple::new).collect(Collectors.toList());
     }
 
     @ApiOperation("APP添加权限")
     @PostMapping("/authority/save.url")
-    public List<AuthorityValue.Simple> saveAuthority(@RequestParam String[] url) {
+    public List<PermissionValue.Simple> saveAuthority(@RequestParam String[] url) {
         Webapp webapp = this.getLogin();
-        return authorityService.save(webapp, url).stream().map(AuthorityValue.Simple::new).collect(Collectors.toList());
+        return authorityService.save(webapp, url).stream().map(PermissionValue.Simple::new).collect(Collectors.toList());
     }
 
     @ApiOperation("APP的信息")

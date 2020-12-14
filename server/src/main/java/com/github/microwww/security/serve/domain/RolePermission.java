@@ -1,6 +1,5 @@
 package com.github.microwww.security.serve.domain;
 
-import java.util.*;
 import javax.persistence.*;
 
 /**
@@ -9,25 +8,25 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "role_permission")
-public class RoleAuthority extends AbstractBasicEntity {
+public class RolePermission extends AbstractBasicEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "permission_id", columnDefinition = "INT", nullable = false)
-    private Authority authority;
+    private Permission permission;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "role_id", columnDefinition = "INT", nullable = false)
     private Role role;
 
-    public RoleAuthority() {
+    public RolePermission() {
     }
 
-    public Authority getAuthority() {
-        return authority;
+    public Permission getPermission() {
+        return permission;
     }
 
-    public void setAuthority(Authority authority) {
-        this.authority = authority;
+    public void setPermission(Permission permission) {
+        this.permission = permission;
     }
 
     public Role getRole() {

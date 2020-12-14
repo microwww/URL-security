@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.microwww.security.cli.dto.App;
-import com.github.microwww.security.cli.dto.Account;
-import com.github.microwww.security.cli.dto.Authority;
+import com.github.microwww.security.cli.dto.Permission;
 import com.github.microwww.security.cli.dto.Token;
 import com.github.microwww.security.cli.help.Rconfig;
 import com.github.microwww.security.cli.imp.AuthorityServiceImp;
@@ -26,14 +25,14 @@ public class RurlServiceWrapTest {
     public void testListUrlRight() {
         System.out.println("listUrlRight");
         String account = "1";
-        List<Authority> result = instance.listAuthorityByAccount(account);
+        List<Permission> result = instance.listPermissionByAccount(account);
         assertFalse(result.isEmpty());
     }
 
     @Test
     public void testListAppURL() {
         System.out.println("listAppURL");
-        List<Authority> result = instance.listAuthorityByApp();
+        List<Permission> result = instance.listPermissionByApp();
         assertFalse(result.isEmpty());
     }
 
@@ -41,7 +40,7 @@ public class RurlServiceWrapTest {
     public void testListMenu() {
         System.out.println("listMenu");
         String account = "1";
-        List<Authority> result = instance.listMenu(account);
+        List<Permission> result = instance.listMenu(account);
         assertFalse(result.isEmpty());
     }
 
@@ -61,7 +60,7 @@ public class RurlServiceWrapTest {
         set.add("/app/");
         set.add("/groups/");
         set.add("/url/");
-        List<Authority> result = instance.saveAuthorityUrl(set);
+        List<Permission> result = instance.savePermissionUrl(set);
         assertEquals(result.size(), set.size());
     }
 

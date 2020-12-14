@@ -3,7 +3,7 @@ package com.github.microwww.security.cli;
 
 import com.github.microwww.security.cli.dto.Account;
 import com.github.microwww.security.cli.dto.App;
-import com.github.microwww.security.cli.dto.Authority;
+import com.github.microwww.security.cli.dto.Permission;
 import com.github.microwww.security.cli.dto.Token;
 
 import java.util.List;
@@ -18,13 +18,13 @@ public interface AccountAuthorityService {
 
     Account login(String account, String password) throws NoRightException;
 
-    List<Authority> listAuthorityByAccount(String account);
+    List<Permission> listPermissionByAccount(String account);
 
-    List<Authority> listAuthorityByApp();
+    List<Permission> listPermissionByApp();
 
-    List<Authority> listMenu(String account);
+    List<Permission> listMenu(String account);
 
-    List<Authority> saveAuthorityUrl(Set<String> set);
+    List<Permission> savePermissionUrl(Set<String> set);
 
     App getApplication();
 

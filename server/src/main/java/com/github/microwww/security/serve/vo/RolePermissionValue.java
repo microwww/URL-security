@@ -1,14 +1,14 @@
 package com.github.microwww.security.serve.vo;
 
-import com.github.microwww.security.serve.domain.RoleAuthority;
+import com.github.microwww.security.serve.domain.RolePermission;
 
 import java.util.Date;
 
-public abstract class RoleAuthorityValue {
+public abstract class RolePermissionValue {
 
-    public static class Simple extends AbstractDomainValue<RoleAuthority> {
+    public static class Simple extends AbstractDomainValue<RolePermission> {
 
-        public Simple(RoleAuthority domain) {
+        public Simple(RolePermission domain) {
             super(domain);
         }
 
@@ -23,12 +23,12 @@ public abstract class RoleAuthorityValue {
 
     public static class Info extends Simple {
 
-        public Info(RoleAuthority domain) {
+        public Info(RolePermission domain) {
             super(domain);
         }
 
-        public AuthorityValue.Simple getAuthority() {
-            return new AuthorityValue.Simple(super.domain.getAuthority());
+        public PermissionValue.Simple getPermission() {
+            return new PermissionValue.Simple(super.domain.getPermission());
         }
 
         public RoleValue.Simple getRole() {
@@ -38,21 +38,21 @@ public abstract class RoleAuthorityValue {
 
     public static class More extends Info {
 
-        public More(RoleAuthority domain) {
+        public More(RolePermission domain) {
             super(domain);
         }
     }
 
     public static class Form extends ID {
-        private AuthorityValue.Form authority;
+        private PermissionValue.Form permission;
         private RoleValue.Form role;
 
-        public AuthorityValue.Form getAuthority() {
-            return authority;
+        public PermissionValue.Form getPermission() {
+            return permission;
         }
 
-        public void setAuthority(AuthorityValue.Form authority) {
-            this.authority = authority;
+        public void setPermission(PermissionValue.Form permission) {
+            this.permission = permission;
         }
 
         public RoleValue.Form getRole() {

@@ -106,13 +106,13 @@ export function listPermission (parameter) {
     method: 'post',
     data: {
       ...parameter,
-      entity: 'Authority'
+      entity: 'Permission'
     }
   })
 }
 export function savePermission (parameter) {
   return request({
-    url: api.save + '/Authority',
+    url: api.save + '/Permission',
     method: 'post',
     data: {
       ...parameter
@@ -122,7 +122,7 @@ export function savePermission (parameter) {
 export function deletePermission (parameter) {
   return request({
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    url: api.delete + '/Authority',
+    url: api.delete + '/Permission',
     method: 'post',
     data: Qs.stringify(parameter)
   })
