@@ -82,7 +82,6 @@ const user = {
 
           resolve({ result: result })
         }).catch(error => {
-          debugger
           reject(error)
         })
       })
