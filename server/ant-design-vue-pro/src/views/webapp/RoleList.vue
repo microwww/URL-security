@@ -63,14 +63,14 @@
             />
           </a-form-item>
           <a-form-item label="应用">
-            <SelectWebapp
+            <a-select-webapp
               v-decorator="['webapp.id', { rules: [{ required: true, message: 'Please input your note!' }] }]"
               placeholder="input search text"
               @searched="searched"
               @select="selectWebapp"
             >
-            <a-select-option v-for="d in domain.searchData" :key="d.id">{{ d.name }}</a-select-option>
-            </SelectWebapp>
+              <a-select-option v-for="d in domain.searchData" :key="d.id">{{ d.name }}</a-select-option>
+            </a-select-webapp>
           </a-form-item>
           <a-form-item label="描述">
             <a-input
@@ -124,7 +124,7 @@ const columns = [
 export default {
   name: 'TableList',
   components: {
-    SelectWebapp,
+    ASelectWebapp: SelectWebapp,
     STable,
     Ellipsis
   },
